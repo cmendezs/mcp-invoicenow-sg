@@ -1,0 +1,6 @@
+Date: 24 Jul 2026
+* Added START_HERE.pdf document
+* Simplified test scripts by removing TC103
+* Added test case No submission for un-activated users
+* Added test case Non Peppol sales Invoice with missing MDE (Data Flow Type 2A)
+* Editorial edits to [2. C5 Accreditation Testing - IRSP v1.4.xslx] for better clarity

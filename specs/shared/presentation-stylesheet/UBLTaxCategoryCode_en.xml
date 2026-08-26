@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CodeList xmlns="http://docs.oasis-open.org/codelist/ns/genericode/1.0/">
+	<Identification>
+		<ShortName>InvoiceBaseType</ShortName>
+		<Version></Version>
+		<CanonicalUri></CanonicalUri>
+		<CanonicalVersionUri></CanonicalVersionUri>
+	</Identification>
+	<ColumnSet>
+		<Column Id="code" Use="required">
+			<ShortName>Code</ShortName>
+			<Data Type="string"/>
+		</Column>
+		<Column Id="name" Use="optional">
+			<ShortName>Name</ShortName>
+			<Data Type="string"/>
+		</Column>
+		<Key Id="codeKey">
+			<ShortName>CodeKey</ShortName>
+			<ColumnRef Ref="code"/>
+		</Key>
+	</ColumnSet>
+	<SimpleCodeList>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>SR</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Standard rated</SimpleValue>
+			</Value>
+		</Row>
+		
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>SRCA-S</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Standard rated</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>SRCA-C</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Standard rated</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>ZR</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Zero rated</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>ES33</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Exempt</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>ESN33</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Exempt</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>DS</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Deemed supplies</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>OS</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Out-of-Scope supplies</SimpleValue>
+			</Value>
+		</Row>
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>NG</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Supplies from Non GST registered company</SimpleValue>
+			</Value>
+		</Row>
+
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>SRRC</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Reverse Charge</SimpleValue>
+			</Value>
+		</Row>	
+		
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>SROVR-RS</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Standard rated</SimpleValue>
+			</Value>
+		</Row>		
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>SROVR-LVG</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Standard rated</SimpleValue>
+			</Value>
+		</Row>			
+		<Row>
+			
+			<Value ColumnRef="code">
+				<SimpleValue>SRLVG</SimpleValue>
+			</Value>
+			<Value ColumnRef="name">
+				<SimpleValue>Standard rated</SimpleValue>
+			</Value>
+		</Row>			
+	</SimpleCodeList>
+</CodeList>

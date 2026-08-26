@@ -1,0 +1,30 @@
+Date: 28 Nov 2024
+* Fixed schematron rule IRASC5-090
+
+Date: 07 Jan 2025
+* Changed bulk API tests to be optional
+
+Date: 13 Jan 2025
+* Clean up and fixed schematron rule IRASC5-037
+
+Date: 06 Feb 2025
+* Removed schematron rule IRASC5-073, IRASC5-074
+* Added TXNA to tax category codes list
+
+Date: 19 Feb 2025
+* Fixed bulk test sample file Bulk_invalid_2.xml
+* Added empty schematron file for testing
+
+Date: 14 Apr 2025
+* Fix typo in taxcode TX-ESS in schematron
+
+Date: 30 Jun 2025
+* Fix IRASC5-055 and IRASC5-070 to allow value of 0
+
+Date: 19 Aug 2025
+* Fix IRASC5-066 by adding missing code TXNA
+
+Date: 24 Jul 2026
+* Added START_HERE.pdf document
+* Simplified test scripts by removing TC302.2; TC302.3; TC701; TC801
+* Editorial edits to GST InvoiceNow Accreditation Test Script.xslx for better clarity

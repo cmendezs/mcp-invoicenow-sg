@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OrderChange
+    xmlns="urn:oasis:names:specification:ubl:schema:xsd:OrderChange-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <cbc:CustomizationID>urn:fdc:peppol.eu:poacc:trns:order_change:3</cbc:CustomizationID>
+  <cbc:ProfileID>urn:fdc:peppol.eu:poacc:bis:advanced_ordering:3</cbc:ProfileID>
+	<cbc:ID>1-ORDER-CHANGE</cbc:ID>
+	<cbc:IssueDate>2025-03-12</cbc:IssueDate>
+	<cbc:SequenceNumberID>1</cbc:SequenceNumberID>
+	<cbc:DocumentCurrencyCode>SGD</cbc:DocumentCurrencyCode>
+	<cac:OrderReference>
+		<cbc:ID>123-ORIGINAL-ORDER</cbc:ID>
+	</cac:OrderReference>
+    <cac:BuyerCustomerParty>
+      <cac:Party>
+        <cbc:EndpointID schemeID="0195">SGTSTT12345678A</cbc:EndpointID>
+        <cac:PartyIdentification>
+          <cbc:ID>T12345678A</cbc:ID>
+        </cac:PartyIdentification>
+        <cac:PartyName>
+          <cbc:Name>Buyer Company</cbc:Name>
+        </cac:PartyName>
+        <cac:PartyLegalEntity>
+          <cbc:RegistrationName>Buyer Company</cbc:RegistrationName>
+        </cac:PartyLegalEntity>
+        <cac:Contact>
+          <cbc:Name>DEV LTA BUYER</cbc:Name>
+          <cbc:Telephone>2132132</cbc:Telephone>
+          <cbc:ElectronicMail>buyer@buyer.com</cbc:ElectronicMail>
+        </cac:Contact>
+      </cac:Party>
+    </cac:BuyerCustomerParty>
+    <cac:SellerSupplierParty>
+      <cac:Party>
+        <cbc:EndpointID schemeID="0195">SGTSTIMDADEMO02</cbc:EndpointID>
+        <cac:PartyIdentification>
+          <cbc:ID>IMDADEMO02</cbc:ID>
+        </cac:PartyIdentification>
+        <cac:PartyName>
+          <cbc:Name>Supplier Company.</cbc:Name>
+        </cac:PartyName>
+        <cac:PostalAddress>
+          <cbc:StreetName>818, Woodlands Street 82 #09-421</cbc:StreetName>
+          <cbc:PostalZone>730818</cbc:PostalZone>
+          <cac:Country>
+            <cbc:IdentificationCode>SG</cbc:IdentificationCode>
+          </cac:Country>
+        </cac:PostalAddress>
+        <cac:PartyLegalEntity>
+          <cbc:RegistrationName>Supplier Company.</cbc:RegistrationName>
+        </cac:PartyLegalEntity>
+        <cac:Contact>
+          <cbc:Name>Supplier Company.</cbc:Name>
+          <cbc:Telephone>65557788</cbc:Telephone>
+          <cbc:ElectronicMail>seller@seller.com</cbc:ElectronicMail>
+        </cac:Contact>
+      </cac:Party>
+    </cac:SellerSupplierParty>
+    <cac:PaymentTerms>
+      <cbc:Note>8D</cbc:Note>
+    </cac:PaymentTerms>
+    <cac:AnticipatedMonetaryTotal>
+      <cbc:LineExtensionAmount currencyID="SGD">10000.00</cbc:LineExtensionAmount>
+      <cbc:TaxExclusiveAmount currencyID="SGD">10000.00</cbc:TaxExclusiveAmount>
+      <cbc:TaxInclusiveAmount currencyID="SGD">10000.00</cbc:TaxInclusiveAmount>
+      <cbc:AllowanceTotalAmount currencyID="SGD">0</cbc:AllowanceTotalAmount>
+      <cbc:ChargeTotalAmount currencyID="SGD">0</cbc:ChargeTotalAmount>
+      <cbc:PrepaidAmount currencyID="SGD">0</cbc:PrepaidAmount>
+      <cbc:PayableAmount currencyID="SGD">10000.00</cbc:PayableAmount>
+    </cac:AnticipatedMonetaryTotal>
+    <cac:OrderLine>
+      <cbc:Note>     
+      Delivery Address:
+      Block 123, #05-67
+Jurong West Street 42
+Singapore 640123
+      </cbc:Note>
+      <cac:LineItem>
+        <cbc:ID>1</cbc:ID>
+        <cbc:LineStatusCode>3</cbc:LineStatusCode>
+        <cbc:Quantity unitCode="XLT">150</cbc:Quantity>
+        <cbc:LineExtensionAmount currencyID="SGD">7500</cbc:LineExtensionAmount>
+        <cac:Price>
+          <cbc:PriceAmount currencyID="SGD">50</cbc:PriceAmount>
+        </cac:Price>
+        <cac:Item>
+          <cbc:Name>Machinery parts</cbc:Name>
+        </cac:Item>
+      </cac:LineItem>
+    </cac:OrderLine>
+    <cac:OrderLine>
+      <cbc:Note>Delivery Address:
+      Block 123, #05-67
+Jurong West Street 42
+Singapore 640123
+      </cbc:Note>
+      <cac:LineItem>
+        <cbc:ID>2</cbc:ID>
+        <cbc:LineStatusCode>4</cbc:LineStatusCode>
+        <cbc:Quantity unitCode="XLT">100</cbc:Quantity>
+        <cbc:LineExtensionAmount currencyID="SGD">2500</cbc:LineExtensionAmount>
+        <cac:Price>
+          <cbc:PriceAmount currencyID="SGD">25</cbc:PriceAmount>
+        </cac:Price>
+        <cac:Item>
+          <cbc:Name>Drill, ProTorque X750</cbc:Name>
+        </cac:Item>
+      </cac:LineItem>
+    </cac:OrderLine>     
+  </OrderChange>

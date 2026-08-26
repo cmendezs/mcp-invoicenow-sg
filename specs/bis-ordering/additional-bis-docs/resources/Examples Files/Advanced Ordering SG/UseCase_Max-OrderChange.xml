@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StandardBusinessDocument xmlns="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader">
+	<StandardBusinessDocumentHeader>
+		<HeaderVersion>1.0</HeaderVersion>
+		<Sender>
+			<Identifier Authority="iso6523-actorid-upis">0195:SGTSTT12345678A</Identifier>
+		</Sender>
+		<Receiver>
+			<Identifier Authority="iso6523-actorid-upis">0195:SGTSTIMDADEMO02</Identifier>
+		</Receiver>
+		<DocumentIdentification>
+			<Standard>urn:oasis:names:specification:ubl:schema:xsd:OrderChange</Standard>
+			<TypeVersion>2.3</TypeVersion>
+			<InstanceIdentifier>7ea39746-b3a1-4136-844a-03bd9611656f</InstanceIdentifier>
+			<Type>OrderChange</Type>
+			<CreationDateAndTime>2025-06-04T17:44:25Z</CreationDateAndTime>
+		</DocumentIdentification>
+		<BusinessScope>
+			<Scope>
+				<Type>DOCUMENTID</Type>
+				<InstanceIdentifier>urn:oasis:names:specification:ubl:schema:xsd:OrderChange-2::OrderChange##urn:fdc:peppol.eu:poacc:trns:order_change:3::2.3</InstanceIdentifier>
+				<Identifier>busdox-docid-qns</Identifier>
+			</Scope>
+			<Scope>
+				<Type>PROCESSID</Type>
+				<InstanceIdentifier>urn:fdc:peppol.eu:poacc:bis:advanced_ordering:3</InstanceIdentifier>
+				<Identifier>cenbii-procid-ubl</Identifier>
+			</Scope>
+			<Scope>
+				<Type>COUNTRY_C1</Type>
+				<InstanceIdentifier>SG</InstanceIdentifier>
+			</Scope>
+		</BusinessScope>
+	</StandardBusinessDocumentHeader>
+	
+<OrderChange
+    xmlns="urn:oasis:names:specification:ubl:schema:xsd:OrderChange-2"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<cbc:CustomizationID>urn:fdc:peppol.eu:poacc:trns:order_change:3</cbc:CustomizationID>
+	<cbc:ProfileID>urn:fdc:peppol.eu:poacc:bis:advanced_ordering:3</cbc:ProfileID>
+	<cbc:ID>1-ORDER-CHANGE</cbc:ID>
+	<cbc:SalesOrderID>112233</cbc:SalesOrderID>
+	<cbc:IssueDate>2025-11-04</cbc:IssueDate>
+	<cbc:IssueTime>12:30:00</cbc:IssueTime>
+	<cbc:SequenceNumberID>1</cbc:SequenceNumberID>	
+	<cbc:Note>Example file with all elements</cbc:Note>
+	<cbc:DocumentCurrencyCode>SGD</cbc:DocumentCurrencyCode>
+	<cbc:CustomerReference>9000012345</cbc:CustomerReference>
+	<cbc:AccountingCost>Project123</cbc:AccountingCost>
+	<cac:ValidityPeriod>
+		<cbc:EndDate>2013-01-31</cbc:EndDate>
+	</cac:ValidityPeriod>
+	<cac:OrderReference>
+		<cbc:ID>Initial_order_number</cbc:ID>
+	</cac:OrderReference>
+	<cac:QuotationDocumentReference>
+		<cbc:ID>QuoteID123</cbc:ID>
+	</cac:QuotationDocumentReference>
+	<cac:OriginatorDocumentReference>
+		<cbc:ID>MAFO</cbc:ID>
+	</cac:OriginatorDocumentReference>
+	<cac:AdditionalDocumentReference>
+		<cbc:ID>Doc1</cbc:ID>
+		<cbc:DocumentType>Timesheet</cbc:DocumentType>
+		<cac:Attachment>
+			<cac:ExternalReference>
+				<cbc:URI>http://www.example.com/sheet001.html</cbc:URI>
+			</cac:ExternalReference>
+		</cac:Attachment>
+	</cac:AdditionalDocumentReference>
+	<cac:AdditionalDocumentReference>
+		<cbc:ID>Doc2</cbc:ID>
+		<cbc:DocumentType>Drawing</cbc:DocumentType>
+		<cac:Attachment>
+			<cbc:EmbeddedDocumentBinaryObject mimeCode="application/pdf" filename="Hours-spend.csv">UjBsR09EbGhjZ0dTQUxNQUFBUUNBRU1tQ1p0dU1GUXhEUzhi
+            </cbc:EmbeddedDocumentBinaryObject>
+		</cac:Attachment>
+	</cac:AdditionalDocumentReference>
+	<cac:Contract>
+		<cbc:ID>34322</cbc:ID>
+	</cac:Contract>
+	<cac:BuyerCustomerParty>
+		<cac:Party>
+			<cbc:EndpointID schemeID="0195">SGTSTT12345678A</cbc:EndpointID>
+			<cac:PartyIdentification>
+				<cbc:ID>T12345678A</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>Buyer Company</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName>Central road 56</cbc:StreetName>
+				<cbc:AdditionalStreetName>Second floor</cbc:AdditionalStreetName>
+				<cbc:CityName>Singapore</cbc:CityName>
+				<cbc:PostalZone>101</cbc:PostalZone>
+				<cbc:CountrySubentity>Singapore</cbc:CountrySubentity>
+				<cac:AddressLine>
+					<cbc:Line>Accounting department</cbc:Line>
+				</cac:AddressLine>
+				<cac:Country>
+					<cbc:IdentificationCode>SG</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID>T12345678A</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID>GST</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>Buyer Company</cbc:RegistrationName>
+				<cbc:CompanyID>T12345678A</cbc:CompanyID>
+				<cac:RegistrationAddress>
+					<cbc:CityName>Singapore</cbc:CityName>
+					<cac:Country>
+						<cbc:IdentificationCode>SG</cbc:IdentificationCode>
+					</cac:Country>
+				</cac:RegistrationAddress>
+			</cac:PartyLegalEntity>
+			<cac:Contact>
+				<cbc:Name>DEV LTA BUYER</cbc:Name>
+				<cbc:Telephone>2132132</cbc:Telephone>
+				<cbc:ElectronicMail>buyer@buyer.com</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:BuyerCustomerParty>
+	<cac:SellerSupplierParty>
+		<cac:Party>
+			<cbc:EndpointID schemeID="0195">SGTSTIMDADEMO02</cbc:EndpointID>
+			<cac:PartyIdentification>
+				<cbc:ID>IMDADEMO02</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>Supplier Company.</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName>Mainstreet 112</cbc:StreetName>
+				<cbc:AdditionalStreetName>Building 3</cbc:AdditionalStreetName>
+				<cbc:CityName>Singapore</cbc:CityName>
+				<cbc:PostalZone>1000</cbc:PostalZone>
+				<cbc:CountrySubentity>Singapore</cbc:CountrySubentity>
+				<cac:AddressLine>
+					<cbc:Line>Sales department</cbc:Line>
+				</cac:AddressLine>
+				<cac:Country>
+					<cbc:IdentificationCode>SG</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>Supplier Company.</cbc:RegistrationName>
+				<cbc:CompanyID>200212345Z</cbc:CompanyID>
+				<cac:RegistrationAddress>
+					<cbc:CityName>Singapore</cbc:CityName>
+					<cac:Country>
+						<cbc:IdentificationCode>SG</cbc:IdentificationCode>
+					</cac:Country>
+				</cac:RegistrationAddress>
+			</cac:PartyLegalEntity>
+			<cac:Contact>
+				<cbc:Name>Supplier Company.</cbc:Name>
+				<cbc:Telephone>65557788</cbc:Telephone>
+				<cbc:ElectronicMail>seller@seller.com</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:SellerSupplierParty>
+	<cac:OriginatorCustomerParty>
+		<cac:Party>
+			<cac:PartyIdentification>
+				<cbc:ID schemeID="0088">7300010000001</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>Internal department</cbc:Name>
+			</cac:PartyName>
+			<cac:Contact>
+				<cbc:Name>Julie Jensen</cbc:Name>
+				<cbc:Telephone>67915012</cbc:Telephone>
+				<cbc:ElectronicMail>post@example.sg</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:OriginatorCustomerParty>
+	<cac:AccountingCustomerParty>
+		<cac:Party>
+			<cbc:EndpointID schemeID="0088">0000000000000</cbc:EndpointID>
+			<cac:PartyIdentification>
+				<cbc:ID>345KS5324</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>Invoicee trade name</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName>Central road 56</cbc:StreetName>
+				<cbc:AdditionalStreetName>Second floor</cbc:AdditionalStreetName>
+				<cbc:CityName>Singapore</cbc:CityName>
+				<cbc:PostalZone>101</cbc:PostalZone>
+				<cbc:CountrySubentity>Singapore</cbc:CountrySubentity>
+				<cac:AddressLine>
+					<cbc:Line>Accounting department</cbc:Line>
+				</cac:AddressLine>
+				<cac:Country>
+					<cbc:IdentificationCode>SG</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>
+			<cac:PartyTaxScheme>
+				<cbc:CompanyID>M2-76654121-K</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID>GST</cbc:ID>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>Invoicee official name</cbc:RegistrationName>
+				<cbc:CompanyID>990212345Z</cbc:CompanyID>
+				<cac:RegistrationAddress>
+					<cbc:CityName>Singapore</cbc:CityName>
+					<cac:Country>
+						<cbc:IdentificationCode>SG</cbc:IdentificationCode>
+					</cac:Country>
+				</cac:RegistrationAddress>
+			</cac:PartyLegalEntity>
+			<cac:Contact>
+				<cbc:Name>Bill</cbc:Name>
+				<cbc:Telephone>5121230</cbc:Telephone>
+				<cbc:ElectronicMail>bill@invoicee_example.sg</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:Party>
+	</cac:AccountingCustomerParty>
+	<cac:Delivery>
+		<cac:DeliveryLocation>
+			<cbc:ID schemeID="0088">7300010000001</cbc:ID>
+			<cac:Address>
+				<cbc:StreetName>Mainstreet 112</cbc:StreetName>
+				<cbc:AdditionalStreetName>Building 3</cbc:AdditionalStreetName>
+				<cbc:CityName>Singapore</cbc:CityName>
+				<cbc:PostalZone>1000</cbc:PostalZone>
+				<cbc:CountrySubentity>Singapore</cbc:CountrySubentity>
+				<cac:AddressLine>
+					<cbc:Line>Sales department</cbc:Line>
+				</cac:AddressLine>
+				<cac:Country>
+					<cbc:IdentificationCode>SG</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:Address>
+		</cac:DeliveryLocation>
+		<cac:RequestedDeliveryPeriod>
+			<cbc:StartDate>2012-10-10</cbc:StartDate>
+			<cbc:StartTime>12:30:00</cbc:StartTime>
+			<cbc:EndDate>2012-10-20</cbc:EndDate>
+			<cbc:EndTime>18:00:00</cbc:EndTime>
+		</cac:RequestedDeliveryPeriod>
+		<cac:DeliveryParty>
+			<cac:PartyIdentification>
+				<cbc:ID schemeID="0088">0000000000000</cbc:ID>
+			</cac:PartyIdentification>
+			<cac:PartyName>
+				<cbc:Name>Mechanical department</cbc:Name>
+			</cac:PartyName>
+			<cac:PostalAddress>
+				<cbc:StreetName>Mainstreet 113</cbc:StreetName>
+				<cbc:AdditionalStreetName>Building 4</cbc:AdditionalStreetName>
+				<cbc:CityName>Singapore</cbc:CityName>
+				<cbc:PostalZone>1000</cbc:PostalZone>
+				<cbc:CountrySubentity>Singapore</cbc:CountrySubentity>
+				<cac:AddressLine>
+					<cbc:Line>Final Delivery department</cbc:Line>
+				</cac:AddressLine>
+				<cac:Country>
+					<cbc:IdentificationCode>SG</cbc:IdentificationCode>
+				</cac:Country>
+			</cac:PostalAddress>			
+			<cac:Contact>
+				<cbc:Name>Benny</cbc:Name>
+				<cbc:Telephone>987098709</cbc:Telephone>
+				<cbc:ElectronicMail>benny@example.sg</cbc:ElectronicMail>
+			</cac:Contact>
+		</cac:DeliveryParty>
+		<cac:Shipment>
+			<cbc:ID>NA</cbc:ID>
+			<cac:TransportHandlingUnit>
+				<cbc:ShippingMarks>Receiving instructions or similar</cbc:ShippingMarks>
+			</cac:TransportHandlingUnit>
+		</cac:Shipment>
+	</cac:Delivery>
+	<cac:DeliveryTerms>
+		<cbc:ID>FOB</cbc:ID>
+		<cbc:SpecialTerms>CAD</cbc:SpecialTerms>
+		<cac:DeliveryLocation>
+			<cbc:ID>FOB Oslo</cbc:ID>
+		</cac:DeliveryLocation>
+	</cac:DeliveryTerms>
+	<cac:PaymentTerms>
+		<cbc:Note>8D</cbc:Note>
+	</cac:PaymentTerms>
+	<cac:AllowanceCharge>
+		<cbc:ChargeIndicator>true</cbc:ChargeIndicator>
+		<cbc:AllowanceChargeReasonCode>ABK</cbc:AllowanceChargeReasonCode>
+		<cbc:AllowanceChargeReason>Miscellaneous services</cbc:AllowanceChargeReason>
+		<cbc:Amount currencyID="SGD">100.00</cbc:Amount>
+		<!--<cac:TaxCategory>
+			<cbc:ID>ZR</cbc:ID>
+			<cbc:Percent>0</cbc:Percent>
+			<cac:TaxScheme>
+				<cbc:ID>GST</cbc:ID>
+			</cac:TaxScheme>
+		</cac:TaxCategory>-->
+	</cac:AllowanceCharge>
+	<cac:AllowanceCharge>
+		<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+		<cbc:AllowanceChargeReasonCode>95</cbc:AllowanceChargeReasonCode>
+		<cbc:AllowanceChargeReason>Discount</cbc:AllowanceChargeReason>
+		<cbc:MultiplierFactorNumeric>10</cbc:MultiplierFactorNumeric>
+		<cbc:Amount currencyID="SGD">100.00</cbc:Amount>
+		<cbc:BaseAmount currencyID="SGD">1000.00</cbc:BaseAmount>
+		<!--<cac:TaxCategory>
+			<cbc:ID>ZR</cbc:ID>
+			<cbc:Percent>0</cbc:Percent>
+			<cac:TaxScheme>
+				<cbc:ID>GST</cbc:ID>
+			</cac:TaxScheme>
+		</cac:TaxCategory>-->
+	</cac:AllowanceCharge>
+	<cac:TaxTotal>
+		<cbc:TaxAmount currencyID="SGD">441.00</cbc:TaxAmount>
+	</cac:TaxTotal>
+	<cac:AnticipatedMonetaryTotal>
+		<cbc:LineExtensionAmount currencyID="SGD">6300.00</cbc:LineExtensionAmount>
+		<cbc:TaxExclusiveAmount currencyID="SGD">6300.00</cbc:TaxExclusiveAmount>
+		<cbc:TaxInclusiveAmount currencyID="SGD">6741.00</cbc:TaxInclusiveAmount>
+		<cbc:AllowanceTotalAmount currencyID="SGD">100.00</cbc:AllowanceTotalAmount>
+		<cbc:ChargeTotalAmount currencyID="SGD">100.00</cbc:ChargeTotalAmount>
+		<cbc:PrepaidAmount currencyID="SGD">0</cbc:PrepaidAmount>
+		<cbc:PayableAmount currencyID="SGD">6741.00</cbc:PayableAmount>
+	</cac:AnticipatedMonetaryTotal>
+	<cac:OrderLine>
+		<cbc:Note>Delivery Address:
+      Block 123, #05-67
+Jurong West Street 42
+Singapore 640123
+      </cbc:Note>
+		<cac:LineItem>
+			<cbc:ID>1</cbc:ID>
+			<cbc:LineStatusCode>3</cbc:LineStatusCode>
+			<cbc:Quantity unitCode="EA">120</cbc:Quantity>
+			<cbc:LineExtensionAmount currencyID="SGD">6300.00</cbc:LineExtensionAmount>
+			<cbc:PartialDeliveryIndicator>false</cbc:PartialDeliveryIndicator>
+			<cbc:AccountingCost>12345678</cbc:AccountingCost>
+			<cac:Delivery>
+				<cac:RequestedDeliveryPeriod>
+					<cbc:StartDate>2025-02-10</cbc:StartDate>
+					<cbc:StartTime>12:30:00</cbc:StartTime>
+					<cbc:EndDate>2025-02-25</cbc:EndDate>
+					<cbc:EndTime>18:00:00</cbc:EndTime>
+				</cac:RequestedDeliveryPeriod>
+			</cac:Delivery>
+			<cac:OriginatorParty>
+				<cac:PartyIdentification>
+					<cbc:ID schemeID="0082">1234567890</cbc:ID>
+				</cac:PartyIdentification>
+				<cac:PartyName>
+					<cbc:Name>Josef K.</cbc:Name>
+				</cac:PartyName>
+			</cac:OriginatorParty>
+			<cac:AllowanceCharge>
+				<cbc:ChargeIndicator>true</cbc:ChargeIndicator>
+				<cbc:AllowanceChargeReasonCode>ABK</cbc:AllowanceChargeReasonCode>
+				<cbc:AllowanceChargeReason>Miscellaneous services</cbc:AllowanceChargeReason>
+				<cbc:Amount currencyID="SGD">600.00</cbc:Amount>
+			</cac:AllowanceCharge>
+			<cac:AllowanceCharge>
+				<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+				<cbc:AllowanceChargeReasonCode>95</cbc:AllowanceChargeReasonCode>
+				<cbc:AllowanceChargeReason>Discount</cbc:AllowanceChargeReason>
+				<cbc:MultiplierFactorNumeric>5</cbc:MultiplierFactorNumeric>
+				<cbc:Amount currencyID="SGD">300.00</cbc:Amount>
+				<cbc:BaseAmount currencyID="SGD">6000.00</cbc:BaseAmount>
+			</cac:AllowanceCharge>
+			<cac:Price>
+				<cbc:PriceAmount currencyID="SGD">50.000</cbc:PriceAmount>
+				<cbc:BaseQuantity unitCode="EA">1</cbc:BaseQuantity>
+				<cac:AllowanceCharge>
+					<cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+					<cbc:Amount currencyID="SGD">10.00</cbc:Amount>
+					<cbc:BaseAmount currencyID="SGD">60.00</cbc:BaseAmount>
+				</cac:AllowanceCharge>
+			</cac:Price>
+			<cac:Item>
+				<cbc:Description>Needle 4mm</cbc:Description>
+				<cbc:Name>Needle 4mm</cbc:Name>
+				<cac:BuyersItemIdentification>
+					<cbc:ID>123456</cbc:ID>
+				</cac:BuyersItemIdentification>
+				<cac:SellersItemIdentification>
+					<cbc:ID>121212</cbc:ID>
+				</cac:SellersItemIdentification>
+				<!--<cac:ManufacturersItemIdentification>
+					<cbc:ID>manid659</cbc:ID>
+				</cac:ManufacturersItemIdentification>-->
+				<cac:StandardItemIdentification>
+					<cbc:ID schemeID="0160">7560000012345</cbc:ID>
+				</cac:StandardItemIdentification>
+				<cac:ItemSpecificationDocumentReference>
+					<cbc:ID>12345678</cbc:ID>
+				</cac:ItemSpecificationDocumentReference>
+				<cac:CommodityClassification>
+					<cbc:ItemClassificationCode listID="MP" listVersionID="19.0501">12345678</cbc:ItemClassificationCode>
+				</cac:CommodityClassification>
+				<!--<cac:ClassifiedTaxCategory>
+					<cbc:ID>SR</cbc:ID>
+					<cbc:Percent>7</cbc:Percent>
+					<cac:TaxScheme>
+						<cbc:ID>GST</cbc:ID>
+					</cac:TaxScheme>
+				</cac:ClassifiedTaxCategory>-->
+				<cac:AdditionalItemProperty>
+					<cbc:Name>Length</cbc:Name>
+					<cbc:Value>30 mm</cbc:Value>
+					<cbc:ValueQuantity unitCode="C62">30</cbc:ValueQuantity>
+					<cbc:ValueQualifier>descr</cbc:ValueQualifier>
+				</cac:AdditionalItemProperty>
+				<cac:ItemInstance>
+					<cbc:SerialID>SE-123456</cbc:SerialID>
+					<cac:LotIdentification>
+						<cbc:LotNumberID>LO-123456</cbc:LotNumberID>
+					</cac:LotIdentification>
+				</cac:ItemInstance>
+			</cac:Item>
+		</cac:LineItem>
+	</cac:OrderLine>
+</OrderChange>
+</StandardBusinessDocument>
