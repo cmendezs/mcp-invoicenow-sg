@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-26T22:18:44.016075+00:00",
+  "generated_at": "2026-08-27T08:20:21.988059+00:00",
   "pkg_name": "mcp-invoicenow-sg",
   "pkg_version": "0.1.0",
-  "core_version": "1.21.0",
+  "core_version": "1.22.0",
   "core_version_compatible": true,
   "exit_code": 2,
   "total_blocking": 2,
@@ -72,7 +72,7 @@
           "tag": "[OK]",
           "severity": "OK",
           "symbol": "mcp-einvoicing-core",
-          "message": "Installed: 1.21.0 | Declared range: is mandatory: uv bug #9811 strips version | Compatible: True"
+          "message": "Installed: 1.22.0 | Declared range: is mandatory: uv bug #9811 strips version | Compatible: True"
         }
       ]
     },
@@ -90,7 +90,7 @@
           "tag": "[NEED]",
           "severity": "BLOCKING",
           "symbol": "specs/README.md",
-          "message": "9 unresolved [NEED:] marker(s) remain. Every standard needs an authority URL and a retrieval date before this package can publish."
+          "message": "12 unresolved [NEED:] marker(s) remain. Every standard needs an authority URL and a retrieval date before this package can publish."
         }
       ]
     }

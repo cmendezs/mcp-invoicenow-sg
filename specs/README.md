@@ -51,6 +51,20 @@ into multiple locations; 127 duplicate files (out of 358) were consolidated into
 below) rather than kept in place. Two exceptions were deliberately kept side by side despite
 matching content — see "Known non-duplicates" at the end of this file.
 
+**2026-08-27 correction — `.gitignore` bug fixed.** The scaffold's `.gitignore` carried a
+blanket `specs/**/*.pdf` / `specs/**/*.zip` rule from before this specs intake happened. That
+rule silently untracked 14 of the files this document lists as "committed as normative" —
+the e-Tax Guide, all four TX1-TX3 PDFs, the FAQ and recommended-features PDFs, the four
+`pint-sg/common/docs/` PDFs, and the two OpenPeppol bundle zips under `pint-sg/common/` — even
+though this file and the commit that introduced it both said "nothing has been excluded." The
+blanket rule violated `context-library/decisions/specs-directory-convention.md` (no blanket
+file-type `.gitignore` exclusion) and was never a deliberate decision recorded anywhere; it was
+scaffold boilerplate nobody revisited once real specs arrived. Removed 2026-08-27; the 14 files
+are now actually tracked, making this file's "Excluded sources" claim true rather than aspirational.
+Also on 2026-08-27: the four loose IRAS PDFs/xlsx that previously sat at `specs/` top level moved
+into `gst-invoicenow-req/` (same "system" as the TX1-TX3 series already there), so every
+standard/system now has exactly one subdirectory and nothing is loose at the top level.
+
 ## Directory layout
 
 ```
@@ -74,19 +88,25 @@ specs/
 │   ├── order-balance/           SG BIS Order Balance 1.0 — Schematron + examples (XSD moved to shared/)
 │   └── additional-bis-docs/     Order/OrderResponse/OrderChange/OrderCancellation/OrderAgreement/
 │                                InvoiceResponse — Schematron + examples (XSD moved to shared/)
-├── gst-invoicenow-req/          IRAS/IMDA Access Point technical series (TX1-TX3)
+├── gst-invoicenow-req/          IRAS/IMDA GST InvoiceNow Requirement material — TX1-TX3 technical
+│   │                            series, e-Tax Guide, FAQ, optional-feature guidance, calculator
+│   ├── etaxguide_gst_invoicenow_requirement.pdf
+│   ├── frequently-asked-questions-for-gst-invoicenow-requirement.pdf
+│   ├── recommended-features-for-the-gst-invoicenow-requirement---validation-check-on-wrongful-gst-charges....pdf
+│   ├── gst-invoicenow-implementation-date-calculator.xlsx
+│   ├── TX1/TX2/TX2_Annex/TX3 - ... .pdf   (the Access Point technical series)
 │   ├── TEST SCRIPTS - AP/       AP accreditation test script + 14 fixtures unique to this package
 │   ├── TEST SCRIPTS - IRSP/     IRSP accreditation test script + 1 fixture unique to this package
 │   ├── TEST SCRIPTS - ENTERPRISE/
 │   └── shared-xml-examples/     9 fixtures byte-identical between the AP and IRSP test packages
 ├── superseded/
 │   └── pint-sg-resources-dev.zip   older PINT-SG dev snapshot (2025-11-28) — see note below
-├── etaxguide_gst_invoicenow_requirement.pdf
-├── frequently-asked-questions-for-gst-invoicenow-requirement.pdf
-├── recommended-features-for-the-gst-invoicenow-requirement---validation-check-on-wrongful-gst-charges....pdf
-├── gst-invoicenow-implementation-date-calculator.xlsx
 └── README.md (this file)
 ```
+
+As of 2026-08-27, every standard/system has exactly one subdirectory — nothing is loose at the
+top level (the four IRAS PDFs/xlsx above moved into `gst-invoicenow-req/` from `specs/` root;
+see the `.gitignore` correction note above).
 
 ## Sources and versions
 
@@ -110,11 +130,11 @@ here if traceability back to the source portal is needed later (e.g. for the reg
 |---|---|---|
 | GST standard rate effective date | `[NEED:]` | e-Tax Guide Annex E confirms 9% but not the rate's own effective date |
 | UEN format / checksum specification | `[NEED:]` | ACRA source, not IRAS/IMDA/OpenPeppol; none of the supplied documents define it |
-| Base PINT rule set (`pint-sg/common/schematron/PINT-UBL-validation-preprocessed.sch`) full review | `[NEED:]` | Only the SG-specific `BR-*-SG` jurisdiction overrides have been extracted so far; unit-price decimal caps likely live in this (much larger) base file — max invoice lines and field-length caps were separately resolved from the FAQ (see `countries/sg.md`) |
-| TX2 + TX2_Annex Annex A full field-level review | `[NEED:]` | TX1 (architecture), TX3 (Access Point services), and TX2_Annex Annex B (customization summary) have been reviewed; the ~500-row Annex A field table has not been mined in depth yet — needed before writing any IRAS-submission emitter |
+| Base PINT rule set (`pint-sg/common/schematron/PINT-UBL-validation-preprocessed.sch`) full review | `[NEED:]` — narrowed 2026-08-27 | Full-file grep (70 rules, entire file) confirms no decimal-place rule targets `cbc:PriceAmount`/unit price; only document/line monetary totals (BT-106+) carry the 2-decimal cap — that sub-question is resolved (see `countries/sg.md`). The file's other ~60 rules (currency-code consistency, party/date/binary-object shape checks) have not been individually catalogued — still `[NEED:]` if a full rule-by-rule inventory is ever needed, but no further compliance-critical gap is expected. |
+| TX2 + TX2_Annex Annex A full field-level review | `[NEED:]` — partially narrowed 2026-08-27 | TX1 (architecture), TX3 (Access Point services), and TX2_Annex Annex B (customization summary, p.75-76) have been reviewed — Annex B resolved the `LocalTaxInvoice` applicability question (Type 1B only; see `countries/sg.md`). The ~500-row Annex A field table has not been mined in depth yet — needed before writing any IRAS-submission emitter |
 | Ordering family Schematron BR-* rule extraction (8 files, 96-330 rules each) | `[NEED:]` | Ordering is in scope (decided 2026-08-26) but no business rules have been extracted from these files yet |
 | AP/IRSP/Enterprise accreditation Office docs (.docx/.xlsx) | `[NEED:]` | Not yet opened — need the docx/xlsx skill |
-| `gst-invoicenow-implementation-date-calculator.xlsx` | `[NEED:]` | Not yet opened |
+| `gst-invoicenow-req/gst-invoicenow-implementation-date-calculator.xlsx` | `[NEED:]` | Not yet opened |
 | Exact OpenPeppol/IMDA download URLs | `[NEED:]` | See note in Sources and versions above |
 
 Resolved this session (2026-08-26) and no longer pending: invoice-tree pathway (`EN16931Invoice`),
@@ -122,9 +142,19 @@ GST standard rate (9%) and full category-code table, SG UEN Peppol scheme code (
 document-total decimal caps (2), max invoice lines and field-length caps (from the FAQ), all
 three invoicing profile URN variants (PINT-SG, SG BIS Billing 3.0, and the `LocalTaxInvoice`
 solution-extracted variant), the transport model (confirmed 5-corner / C1-C5, with full Access
-Point submission mechanics from TX1/TX3), and the nine ordering-family profile URNs. See
-[`context-library/countries/sg.md`](../../context-library/countries/sg.md) for the full detail
-and citations.
+Point submission mechanics from TX1/TX3), and the nine ordering-family profile URNs.
+
+Resolved 2026-08-27 (targeted document re-reads, no new documents): the SGD/currency `[NEED:]`
+(base PINT rules only require internal consistency between `DocumentCurrencyCode` and amount
+`currencyID`s, no SGD-specific mandate), unit-price decimal places (confirmed absent from the
+base PINT schematron by full-file grep), and `LocalTaxInvoice` applicability (Type 1B —
+received Peppol sales invoice/credit note converted to a purchase record — per TX2_Annex Annex
+B p.75-76; Type 3A's status is a narrower residual `[NEED:]`, see `countries/sg.md`). GST rate
+effective date and UEN format/checksum were re-checked the same day and confirmed still genuinely
+absent from every supplied document — not re-derivable without a new source.
+
+See [`context-library/countries/sg.md`](../../context-library/countries/sg.md) for the full
+detail and citations.
 
 ## Non-file sources
 
@@ -180,3 +210,9 @@ are kept in this directory" above and the two `.zip` archives noted as inspected
 duplicates. No promotional, roadmap, or purely marketing material was present in what was
 supplied — unlike the UAE intake, no FTA-style programme/roadmap slide deck came with this
 package's documents.
+
+This statement was **false between 2026-08-26 and 2026-08-27** without anyone deciding it should
+be: a leftover scaffold `.gitignore` rule silently untracked 14 of the files listed above as
+committed (see the "2026-08-27 correction" note near the top of this file). Fixed 2026-08-27 —
+the statement is accurate again as of that fix, verified via
+`git status --porcelain --ignored=matching specs/` returning zero matches.
