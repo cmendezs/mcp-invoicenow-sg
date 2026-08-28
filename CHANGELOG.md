@@ -9,6 +9,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-28
+
+### Fixed
+- **Removed unlicensed bundled Peppol/PINT-SG Schematron overlay.**
+  `PINT-jurisdiction-aligned-rules.xslt` and `PINT-UBL-validation-
+  preprocessed.xslt` (compiled from OpenPeppol's `PINT-jurisdiction-aligned-
+  rules.sch` / `PINT-UBL-validation-preprocessed.sch`) were bundled and
+  shipped in the v0.1.0 wheel with no confirmed redistribution rights — the
+  same absence of license `context-library/decisions/peppol-schematron-
+  artifact.md` found for `mcp-einvoicing-be`/`mcp-ksef-pl`'s Peppol BIS 3.0
+  overlay. Both files are removed; validate_invoice_sg no longer compiles or
+  ships any OpenPeppol-derived Schematron content.
+
+### Changed
+- `validate_invoice_sg` now runs IRAS's own C5 acceptance layer only. The
+  CEN EN16931 base ruleset is wired (`en16931_base_schematron_validator()`,
+  shared with `mcp-einvoicing-be`/`mcp-ksef-pl`) but deliberately not
+  activated: `SGInvoice`'s IRAS GST category codes (`SR`/`ZR`/`ES33`/...)
+  have no sourced crosswalk to the UNCL5305 code list the base ruleset's
+  `BR-CL-17` requires. See `EN16931_BASE_UNAVAILABLE_WARNING` in every
+  result and `[CORE-EN16931-BASE-SG-CROSSWALK-1]` in
+  `context-library/roadmap-2026.md` for what would unblock it.
+- **Known coverage loss**: PINT-SG's own jurisdiction rules (e.g. the
+  `invoice_uuid`/`BR-108-GST-SG` requirement) are no longer checked by
+  `validate_invoice_sg`. This is a real, deliberate reduction in validation
+  coverage, not a defect — see `EN16931_BASE_UNAVAILABLE_WARNING` and
+  `result.metadata["scope"]`.
+
 ## [0.1.0] - 2026-08-28
 
 First release. PINT-SG v1.4.1 / SG Peppol BIS Billing 3.0 sent-invoice support.

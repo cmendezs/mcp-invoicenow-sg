@@ -1,65 +1,157 @@
 """Singapore Schematron validation — SGDocumentValidator(BaseDocumentValidator).
 
-Three ruleset layers, each a pre-compiled Skeleton Schematron XSLT bundled
-under resources/ (specs/ is excluded from the published wheel — only
-src/mcp_invoicenow_sg is packaged, see pyproject.toml
-[tool.hatch.build.targets.wheel]):
+One active ruleset layer, plus one wired-but-not-yet-usable core artifact:
 
-  - "base"/"jurisdiction": PINT-SG v1.4.1 (OpenPeppol), mirrored from
-    specs/pint-sg/common/schematron/. Both declare XSLT root version="1.0"
-    but use XPath 2.0 constructs internally; core's load_schematron_validator()
-    auto-detects this and dispatches to SaxonSchematronValidator (confirmed
-    empirically 2026-08-27, same pattern as FR-XSLT2-1 / DE-XSLT2-1).
   - "iras_c5": IRAS's own post-Peppol acceptance layer ("non_peppol_doc_
     validation" v0.3.4, patched through Aug 2025 — see changelog in
     specs/gst-invoicenow-req/TEST SCRIPTS - AP/9. changelog.txt), mirrored
     from `specs/gst-invoicenow-req/TEST SCRIPTS - AP/7. non_peppol_doc_
     validation.xsl` — this package's own originally-supplied (2026-08-26)
-    IMDA AP accreditation kit, a first-party source; independently
-    cross-verified 2026-08-27 as byte-identical (sha256) to the copy bundled
-    in a third-party AI Skill ("InvoiceNow AI Skills Library — Invoice
-    Packaging v1.0") the user separately supplied, which cites the same
-    ultimate origin. Checks things PINT-SG's own rules don't — e.g.
-    IRASC5-034/026 (buyer/seller UEN presence), IRASC5-045/049 (GST category
-    whitelist per direction). Verified empirically 2026-08-27 against the
-    official `PINT-SG INV example 02` sample: correctly flags `IRASC5-034`
-    (buyer legal registration identifier / UEN missing). A sibling file in
-    the same accreditation-kit directory, `8. TESTING_ONLY_NOT_FOR_PROD.sch`,
-    is deliberately not used — its own filename says why.
+    IMDA AP accreditation kit, a first-party Singapore government source
+    (distinct from OpenPeppol-authored content, so the licensing question
+    below does not apply to it); independently cross-verified 2026-08-27 as
+    byte-identical (sha256) to the copy bundled in a third-party AI Skill
+    ("InvoiceNow AI Skills Library — Invoice Packaging v1.0") the user
+    separately supplied, which cites the same ultimate origin. Verified
+    empirically 2026-08-27 against the official `PINT-SG INV example 02`
+    sample: correctly flags `IRASC5-034` (buyer legal registration
+    identifier / UEN missing). A sibling file in the same accreditation-kit
+    directory, `8. TESTING_ONLY_NOT_FOR_PROD.sch`, is deliberately not used —
+    its own filename says why.
+
+  - "en16931_base": the CEN EN 16931 base Schematron bundled by
+    mcp-einvoicing-core itself
+    (`mcp_einvoicing_core.schematron_artifacts.en16931_base_schematron_validator`,
+    core >= 1.18.0) — the same shared artifact `mcp-einvoicing-be` (v0.8.0)
+    and `mcp-ksef-pl` (v0.6.0) consume for real EN16931 base coverage.
+    `get_sg_validator("en16931_base")` loads it and it is fully functional,
+    but `SGDocumentValidator.validate()` deliberately does NOT call it —
+    see "Why en16931_base is not run" below. Kept wired (not deleted) so a
+    future crosswalk pass can activate it without re-doing this plumbing.
+
+Removed 2026-08-28: this package previously compiled and bundled PINT-SG's
+own jurisdiction overlay itself, from `specs/pint-sg/common/schematron/
+PINT-jurisdiction-aligned-rules.sch` (and the `PINT-UBL-validation-
+preprocessed.sch` base layer alongside it). Neither file carries a
+redistribution grant — same absence of license found for
+`mcp-einvoicing-be`/`mcp-ksef-pl`'s Peppol BIS 3.0 overlay in
+context-library/decisions/peppol-schematron-artifact.md. Do not reintroduce
+either file or a hand-rolled equivalent.
+
+SG Peppol BIS Billing 3.0's Schematron (specs/peppol-bis3/resources/
+Schematron Files/*.sch) has NO pre-compiled XSLT available — only the raw
+ISO Schematron (.sch) source, and per the licensing finding above compiling
+and bundling it would carry the same redistribution problem the PINT-SG
+overlay had. BIS 3.0 validation is not available.
+
+Why en16931_base is not run (2026-08-28):
+Attempting to wire "en16931_base" into SGDocumentValidator.validate()
+surfaced two distinct issues, one fixable and one not:
+
+1. TaxScheme naming (fixed, kept as dead code for future reuse): PINT-SG
+   (verified against the official worked example) emits
+   `cac:TaxScheme/cbc:ID` as "GST", not the CEN base Schematron's hardcoded
+   `'VAT'` filter (see wire_formats.py's `SGUBLSerializer.serialize`, which
+   rewrites the core serializer's "VAT" to "GST" for this exact reason).
+   `_gst_to_vat_for_base_validation` shows the fix: validate a transformed
+   **copy** with "GST" swapped back to "VAT" everywhere except
+   `cac:PartyTaxScheme` (BR-CO-09 there requires an ISO 3166-1 alpha-2
+   country-prefixed VAT number, an EU-specific convention Singapore's
+   UEN-based identifiers were never meant to satisfy — verified against
+   CEN-EN16931-UBL-3.0.20.sch, `mcp-einvoicing-core/specs/peppol/`, main
+   checkout: PartyTaxScheme is the only TaxScheme/ID='VAT' context tied to a
+   country-prefix requirement). This part is a codelist-value substitution
+   in this package's own code, not a reuse of OpenPeppol content, so it
+   carries none of the redistribution risk above.
+
+2. Tax category codes (NOT fixable without a sourced crosswalk): BR-CL-17
+   (and the per-category BR-S-*/BR-Z-*/... rules) require tax category codes
+   from the UNCL5305 code list ("S", "Z", "E", "AE", "K", "G", "L", "M",
+   "O"...). `SGInvoice` uses IRAS's own GST category codes instead ("SR",
+   "ZR", "ES33", "DS", "OS", "NG"...) — a genuinely different code list, not
+   a renaming of the same one. The one local artifact that could plausibly
+   bridge them, `specs/pint-sg/common/codelist/Aligned-TaxCategoryCodes.gc`,
+   only defines SG's own codes (id/name/description) — no crosswalk to
+   UNCL5305 is present in anything supplied. Inventing one would violate the
+   project's hallucination guardrail (tax-category mappings must come from a
+   supplied spec, not memory) and would substantively reimplement the
+   removed, unlicensed PINT-jurisdiction-aligned-rules.sch overlay by hand —
+   exactly what context-library/decisions/peppol-schematron-artifact.md says
+   not to do.
+
+Per user decision (2026-08-28): en16931_base stays unavailable rather than
+running with a partial/misleading result. Tracked in
+context-library/roadmap-2026.md as [CORE-EN16931-BASE-SG-CROSSWALK-1] — the
+specific spec needed to unblock it is an authoritative IRAS/PINT-SG source
+stating the GST-category ↔ UNCL5305 correspondence.
 
 Callers must install mcp-invoicenow-sg[xslt2] for validate_invoice_sg to
 produce a real result; get_sg_validator() surfaces a missing saxonche install
 as SgStylesheetUnsupportedError rather than letting ImportError propagate.
-
-SG Peppol BIS Billing 3.0's Schematron (specs/peppol-bis3/resources/
-Schematron Files/*.sch) has NO pre-compiled XSLT available — only the raw
-ISO Schematron (.sch) source. Compiling it requires the ISO Schematron
-skeleton pipeline (iso_dsdl_include, iso_abstract_expand, iso_svrl_for_
-xslt2), which is a build step nobody has run yet. [NEED: compile
-SG-Billing3-UBL.sch / SG-Subset-*.sch to XSLT, or obtain a pre-compiled
-distribution from OpenPeppol.] BIS 3.0 validation is not yet available.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
+from lxml import etree
 from mcp_einvoicing_core.base_server import BaseDocumentValidator
 from mcp_einvoicing_core.models import DocumentValidationResult
 from mcp_einvoicing_core.schematron import BaseStructuredValidator, load_schematron_validator
+from mcp_einvoicing_core.schematron_artifacts import en16931_base_schematron_validator
+from mcp_einvoicing_core.wire_formats import UBL_NSMAP
 
-_PINT_SG_DIR = Path(__file__).parent / "resources" / "pint_sg"
 _IRAS_C5_DIR = Path(__file__).parent / "resources" / "iras_c5"
+_CAC_NS = UBL_NSMAP["cac"]
+_CBC_NS = UBL_NSMAP["cbc"]
 
-_STYLESHEET_MAP: dict[str, Path] = {
-    "base": _PINT_SG_DIR / "PINT-UBL-validation-preprocessed.xslt",
-    "jurisdiction": _PINT_SG_DIR / "PINT-jurisdiction-aligned-rules.xslt",
+
+def _gst_to_vat_for_base_validation(document: bytes) -> bytes:
+    """Return a copy of *document* with TaxScheme/ID "GST" rewritten to "VAT".
+
+    Excludes cac:PartyTaxScheme (see module docstring — BR-CO-09 is
+    EU-specific and must not fire for Singapore's UEN-based identifiers).
+    Solves issue 1 in the module docstring; NOT sufficient on its own to
+    make en16931_base usable (see issue 2 — the tax-category codelist
+    mismatch). Kept for when a sourced crosswalk unblocks activation.
+    """
+    root = etree.fromstring(document)
+    party_tax_scheme_tag = f"{{{_CAC_NS}}}PartyTaxScheme"
+    for tax_scheme in root.iter(f"{{{_CAC_NS}}}TaxScheme"):
+        parent = tax_scheme.getparent()
+        if parent is not None and parent.tag == party_tax_scheme_tag:
+            continue
+        id_el = tax_scheme.find(f"{{{_CBC_NS}}}ID")
+        if id_el is not None and id_el.text == "GST":
+            id_el.text = "VAT"
+    return etree.tostring(root)
+
+
+_LOCAL_STYLESHEET_MAP: dict[str, Path] = {
     "iras_c5": _IRAS_C5_DIR / "iras-c5-invoicenow.xsl",
 }
 
-SUPPORTED_SG_RULESETS: tuple[str, ...] = tuple(_STYLESHEET_MAP)
+#: "en16931_base" resolves via get_sg_validator() (the core artifact works),
+#: but SGDocumentValidator.validate() does not call it — see module docstring.
+SUPPORTED_SG_RULESETS: tuple[str, ...] = ("en16931_base", *_LOCAL_STYLESHEET_MAP)
+
+#: Rulesets SGDocumentValidator.validate() actually runs.
+_ACTIVE_RULESETS: tuple[str, ...] = ("iras_c5",)
 
 _validators: dict[str, BaseStructuredValidator] = {}
+
+#: Included in every validate_invoice_sg result: explains why the CEN
+#: EN16931 base Schematron is not checked, and what would unblock it. See
+#: "Why en16931_base is not run" in the module docstring and
+#: [CORE-EN16931-BASE-SG-CROSSWALK-1] in context-library/roadmap-2026.md.
+EN16931_BASE_UNAVAILABLE_WARNING = (
+    "EN16931-BASE-UNAVAILABLE: SGInvoice uses IRAS's own GST category codes "
+    "(SR/ZR/ES33/DS/OS/NG/...), not the UNCL5305 code list the CEN EN16931 "
+    "base Schematron's BR-CL-17 (and the per-category rules) require. No "
+    "sourced crosswalk between the two code lists is available — see "
+    "[CORE-EN16931-BASE-SG-CROSSWALK-1] in context-library/roadmap-2026.md. "
+    "iras_c5 is the only ruleset currently checked."
+)
 
 
 class UnsupportedSgRulesetError(ValueError):
@@ -70,15 +162,19 @@ class SgStylesheetUnsupportedError(RuntimeError):
     """Raised when a bundled stylesheet cannot be compiled by the resolved backend.
 
     Most commonly fires when saxonche (the mcp-einvoicing-core[xslt2] extra)
-    is not installed — all three bundled stylesheets require Saxon-HE.
+    is not installed.
     """
 
 
 def get_sg_validator(ruleset: str) -> BaseStructuredValidator:
-    """Return a cached validator for *ruleset* ("base", "jurisdiction", or "iras_c5").
+    """Return a cached validator for *ruleset* ("en16931_base" or "iras_c5").
+
+    "en16931_base" resolves to a working validator (the core artifact loads
+    fine) but SGDocumentValidator.validate() does not call it — see the
+    module docstring for why.
 
     Raises:
-        UnsupportedSgRulesetError: ruleset has no bundled stylesheet.
+        UnsupportedSgRulesetError: ruleset is not one of SUPPORTED_SG_RULESETS.
         SgStylesheetUnsupportedError: stylesheet exists but the required
             backend is unavailable (e.g. saxonche not installed).
     """
@@ -86,18 +182,20 @@ def get_sg_validator(ruleset: str) -> BaseStructuredValidator:
     if validator is not None:
         return validator
 
-    path = _STYLESHEET_MAP.get(ruleset)
-    if path is None:
+    if ruleset not in SUPPORTED_SG_RULESETS:
         msg = (
             f"Unsupported SG ruleset: {ruleset!r}. Supported: {', '.join(SUPPORTED_SG_RULESETS)}."
         )
         raise UnsupportedSgRulesetError(msg)
 
     try:
-        validator = load_schematron_validator(path)
+        if ruleset == "en16931_base":
+            validator = en16931_base_schematron_validator()
+        else:
+            validator = load_schematron_validator(_LOCAL_STYLESHEET_MAP[ruleset])
     except ImportError as exc:
         msg = (
-            f"SG {ruleset!r} ruleset stylesheet requires XSLT 2.0 (Saxon-HE), which is "
+            f"SG {ruleset!r} ruleset stylesheet requires XSLT 2.0/3.0 (Saxon-HE), which is "
             f"not installed. Install with: pip install mcp-invoicenow-sg[xslt2]. "
             f"Underlying error: {exc}"
         )
@@ -111,20 +209,18 @@ def get_sg_validator(ruleset: str) -> BaseStructuredValidator:
 
 
 class SGDocumentValidator(BaseDocumentValidator):
-    """Runs PINT-SG's base + jurisdiction rulesets, plus IRAS's C5 acceptance layer.
+    """Runs IRAS's C5 acceptance layer. CEN EN16931 base coverage is unavailable.
 
-    A document can be PINT-SG-conformant (pass "base" + "jurisdiction") and
-    still be rejected by IRAS's own C5 layer (e.g. missing buyer/seller UEN,
-    which PINT-SG's own rules do not require but IRAS's IRASC5-034/026 do) —
-    both layers are reported, not just one. See the module docstring for
-    provenance of "iras_c5". BIS 3.0 is not covered — see the module docstring.
+    See the module docstring ("Why en16931_base is not run") and
+    EN16931_BASE_UNAVAILABLE_WARNING, which is included in every result.
+    BIS 3.0 is not covered either — see the module docstring.
     """
 
     def get_schema_version(self) -> str:
-        return "PINT-SG 1.4.1 + IRAS C5 non_peppol_doc_validation v0.3.4"
+        return "IRAS C5 non_peppol_doc_validation v0.3.4 (EN16931 base unavailable)"
 
     def get_schema_path(self) -> str | None:
-        return str(_PINT_SG_DIR.parent)
+        return str(_IRAS_C5_DIR.parent)
 
     def validate(self, document_content: str | bytes) -> DocumentValidationResult:
         content = (
@@ -134,10 +230,15 @@ class SGDocumentValidator(BaseDocumentValidator):
         )
 
         errors: list[str] = []
-        warnings: list[str] = []
-        metadata: dict = {"rulesets_run": [], "scope": "PINT-SG + IRAS C5 (no SG BIS 3.0 stylesheet)"}
+        warnings: list[str] = [EN16931_BASE_UNAVAILABLE_WARNING]
+        metadata: dict = {
+            "rulesets_run": [],
+            "scope": "iras-c5-only (EN16931 base, PINT-SG jurisdiction overlay, "
+            "and SG BIS 3.0 not checked — see EN16931_BASE_UNAVAILABLE_WARNING "
+            "and peppol-schematron-artifact.md)",
+        }
 
-        for ruleset in ("base", "jurisdiction", "iras_c5"):
+        for ruleset in _ACTIVE_RULESETS:
             try:
                 validator = get_sg_validator(ruleset)
             except (UnsupportedSgRulesetError, SgStylesheetUnsupportedError) as exc:

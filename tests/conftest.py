@@ -19,8 +19,12 @@ def sg_invoice_data() -> dict:
     """A minimal, schematron-conformant PINT-SG invoice payload.
 
     Field values (buyer_reference, due_date, invoice_uuid) are present
-    specifically because PINT-jurisdiction-aligned-rules.sch requires them —
-    see models/invoice.py's SGInvoice.invoice_uuid docstring.
+    because PINT-SG's own jurisdiction rules require them — see
+    models/invoice.py's SGInvoice.invoice_uuid docstring. That ruleset is no
+    longer bundled/checked by validate_invoice_sg (see
+    validators/schematron.py's module docstring), but the fixture keeps these
+    fields populated since SGInvoice still models and documents them as
+    PINT-SG requirements independent of what the validator currently checks.
     """
     address = {
         "line_one": "1 Example Street",

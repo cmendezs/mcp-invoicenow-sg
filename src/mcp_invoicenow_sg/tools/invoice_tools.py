@@ -78,18 +78,20 @@ def register_invoice_tools(mcp: FastMCP) -> None:
             str, Field(description="UBL 2.1 Invoice or CreditNote XML content to validate.")
         ],
     ) -> dict[str, Any]:
-        """Validate a UBL 2.1 XML invoice against PINT-SG v1.4.1 + IRAS C5 Schematron rules.
+        """Validate a UBL 2.1 XML invoice against IRAS's C5 acceptance-layer Schematron.
 
-        Runs PINT-SG's base and jurisdiction-aligned rulesets, plus IRAS's own
-        C5 acceptance layer (checks Peppol-valid documents that IRAS itself
-        would still reject, e.g. a missing buyer/seller UEN). Only PINT-SG is
-        covered — SG Peppol BIS Billing 3.0 has no pre-compiled Schematron
-        stylesheet available yet (see context-library/countries/sg.md);
-        documents on that profile will validate against neither PINT ruleset
-        and the result's `warnings` will say so, with `valid=false`.
+        Runs IRAS's own C5 acceptance layer (checks documents that IRAS
+        itself would still reject, e.g. a missing buyer/seller UEN). The CEN
+        EN16931 base ruleset, PINT-SG's own jurisdiction overlay, and SG
+        Peppol BIS Billing 3.0 are NOT checked — see `scope` and the
+        `EN16931-BASE-UNAVAILABLE` warning in the result, and
+        validators/schematron.py's module docstring for why (SGInvoice's GST
+        category codes have no sourced crosswalk to the UNCL5305 code list
+        the base ruleset requires; tracked as
+        [CORE-EN16931-BASE-SG-CROSSWALK-1] in context-library/roadmap-2026.md).
 
         Requires the optional `xslt2` extra (`pip install
-        mcp-invoicenow-sg[xslt2]`) — the bundled stylesheets need XSLT 2.0.
+        mcp-invoicenow-sg[xslt2]`) — the bundled stylesheet needs XSLT 2.0.
         If missing, returns `level="unavailable"`.
         """
         try:
