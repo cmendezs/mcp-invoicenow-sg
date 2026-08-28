@@ -10,53 +10,38 @@
 
 ---
 
-> **Scaffold stage — not yet published.** This repository contains the package skeleton only.
-> No tools, models, or validators are implemented yet, and no release has been tagged.
-> See [Current status](#current-status) for what is blocking implementation.
-
----
-
 ## Introduction
 
 `mcp-invoicenow-sg` is an [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server
-that will expose tools for Singapore electronic invoicing over **InvoiceNow**, the national
-e-invoicing platform operated by IMDA. It is part of the `mcp-einvoicing-*` family of
-country-specific servers, all built on
+for Singapore electronic invoicing over **InvoiceNow**, the national e-invoicing platform
+operated by IMDA. It builds and validates PINT-SG v1.4.1 and SG Peppol BIS Billing 3.0 sent
+invoices (originally-issued invoices, not the received/purchase side). It is part of the
+`mcp-einvoicing-*` family of country-specific servers, all built on
 [`mcp-einvoicing-core`](https://github.com/cmendezs/mcp-einvoicing-core), which provides the
 shared validation engine, EN 16931 abstractions, and Peppol network utilities.
 
 ---
 
-## Current status
-
-The package is a scaffold. Implementation is gated on normative source material that has not
-been supplied yet.
-
-| Area | Status |
-|---|---|
-| Repository, CI, governance docs | Done |
-| Package skeleton (`src/` layout, server entry point) | Done |
-| Normative specifications under `specs/` | **Missing** |
-| Supported standards and profile URNs | Blocked |
-| Invoice model and validators | Blocked |
-| MCP tools | Blocked |
-| First release (`v0.1.0`) | Blocked |
-
-Compliance values for this package are never written from memory. They are read from
-normative documents placed in [`specs/`](specs/) and recorded in the monorepo country
-reference before any code uses them. The document list and what each one unblocks is in
-[`specs/sources.md`](specs/sources.md).
-
----
-
 ## Supported standards
 
-`[NEED: confirm from the PINT-SG specification]`
+- **PINT-SG v1.4.1** (`urn:peppol:pint:billing-1@sg-1`) — the recommended profile for new
+  senders.
+- **SG Peppol BIS Billing 3.0** — legacy profile, predates the PINT programme.
+- Both are EN 16931-conformant; the invoice model extends
+  `mcp_einvoicing_core.en16931.EN16931Invoice`.
+- Validation runs the real PINT-SG Schematron (base + jurisdiction rulesets) plus IRAS's own C5
+  acceptance layer — a document can be PINT-SG-conformant and still be rejected by IRAS (e.g. a
+  missing buyer/seller UEN), and both outcomes are reported.
 
-Singapore uses the Peppol network through InvoiceNow rather than a clearance model. The
-specific profile version, `CustomizationID` and `ProfileID` URNs, the EN 16931 conformance
-relationship, and the applicable Schematron rule set are all unresolved until the PINT-SG
-specification is supplied. This section is filled in from that document, not from memory.
+**Not yet supported** (see [`specs/README.md`](specs/README.md) and this monorepo's
+`context-library/countries/sg.md` for full detail):
+- The Peppol Ordering message family (`Order`, `OrderResponse`, etc.) and IMDA's SG-specific
+  Order Balance.
+- Submission to an IMDA-accredited Access Point — no publicly available document states an
+  Access Point's actual API base URL or authentication flow; this package builds and validates
+  documents, it does not transmit them.
+- SG Peppol BIS Billing 3.0 Schematron validation — only PINT-SG's rule sets are bundled.
+- The received/purchase-side invoice model (`LocalTaxInvoice`, TX2_Annex Annex B Type 1B).
 
 ---
 
@@ -67,8 +52,10 @@ specification is supplied. This section is filled in from that document, not fro
 - Python ≥ 3.11
 - [`mcp-einvoicing-core`](https://github.com/cmendezs/mcp-einvoicing-core) (installed
   automatically as a dependency)
+- Optional: the `xslt2` extra (`pip install mcp-invoicenow-sg[xslt2]`) — required for
+  `validate_invoice_sg` to run. The bundled PINT-SG and IRAS C5 stylesheets require XSLT 2.0.
 
-### Using `uvx` (recommended, once published)
+### Using `uvx` (recommended)
 
 ```bash
 uvx mcp-invoicenow-sg
@@ -111,14 +98,20 @@ Add the server to your MCP client configuration:
 |---|---|---|---|
 | `LOG_LEVEL` | No | `INFO` | Logging level: `DEBUG`, `INFO`, `WARNING`, or `ERROR` |
 
-Country-specific variables (transport endpoints, credentials, environment switches) are added
-once the specification documents them. See [`.env.example`](.env.example).
-
 ---
 
 ## Tools
 
-None yet. The server starts and registers zero tools at this stage.
+| Tool | Description |
+|---|---|
+| `generate_invoice_sg` | Build an `SGInvoice` from structured data and serialize it to UBL 2.1 XML. |
+| `validate_invoice_sg` | Validate a UBL 2.1 invoice against PINT-SG's Schematron rulesets plus IRAS's C5 acceptance layer. |
+| `get_gst_category_codes_sg` | Return the IRAS GST category codes (Annex E) accepted on Singapore invoices. |
+| `get_profile_urn_sg` | Return the CustomizationID (BT-24) and ProfileID (BT-23) for a given profile (`PINT_SG` or `BIS3`). |
+
+**Recommended workflow:** `get_profile_urn_sg` to pick the profile pair, then
+`generate_invoice_sg` with that pair in the invoice data, then `validate_invoice_sg` on the
+result.
 
 The tool reference in [`docs/TOOLS.md`](docs/TOOLS.md) is generated from the running server:
 

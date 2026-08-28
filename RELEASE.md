@@ -47,17 +47,18 @@ those entries under the new version heading.
 
 ---
 
-## Pre-release gate for this package
+## Release history
 
-`v0.1.0` is **not** ready to tag. Two gates are open:
+### v0.1.0 - 2026-08-28 (first release)
 
-1. `specs/sources.md` still holds `[NEED:]` rows. Audit gate CHECK 5 requires one authority
-   URL per standard, so `audit/audit_vs_core.py` will not pass.
-2. No PINT-SG specification has been supplied, so the invoice-tree pathway, profile URNs,
-   GST rate, and UEN format are unresolved and no tools exist to publish.
-
-The PyPI pending publisher is already registered, so the first `v0.1.0` tag push will
-authenticate correctly once these gates close.
+PINT-SG v1.4.1 / SG Peppol BIS Billing 3.0 sent-invoice support (`SGInvoice`), UBL 2.1
+serialization, PINT-SG + IRAS C5 Schematron validation, and 4 MCP tools. Depends on
+`mcp-einvoicing-core>=1.24.0` for `TaxIdentifier.validate_sg_uen()`. Ordering-family models,
+the IRAS Access Point submission client, and SG BIS 3.0 Schematron compilation are out of
+scope for this release — see `specs/README.md` and `context-library/countries/sg.md` (in the
+root monorepo) for full detail, including two `specs/README.md` items closed out editorially
+(`[DEFERRED]`, not resolved) as a deliberate release decision since neither is load-bearing
+for what this version ships. Full changelog: [`CHANGELOG.md`](CHANGELOG.md).
 
 ---
 
