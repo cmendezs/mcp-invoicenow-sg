@@ -10,20 +10,21 @@ Exit codes:
     1  Warnings only (non-blocking)
     2  Blocking failures found
 
-Scaffold-stage note
--------------------
-This package has no models, validators, or tools yet. CHECK 0 below records the
-gates that block implementation and fails the audit while any of them is open,
-which is the intended state: the package must not publish.
+Phase D note (2026-08-27)
+-------------------------
+``_IS_EN16931_FAMILY`` / ``_PRIMARY_INVOICE_CLASS`` are now set (SGInvoice,
+resolved per context-library/countries/sg.md's "Invoice-tree pathway"), so
+CHECK 1 (core interface coverage) runs unconditionally alongside CHECK 0, 4,
+and 5. CHECK 1's ``[MISSING]`` findings are WARNING severity, not BLOCKING —
+``_INTENTIONAL_OVERRIDES`` has not been exhaustively populated yet (this
+covers invoice generation/validation only; no Ordering-family or Access
+Point work has landed), so warnings there are expected and non-blocking.
 
-CHECK 1 (core interface coverage) and CHECK 3 (invoice field alignment) are
-deliberately deferred while CHECK 0 is failing. Running CHECK 1 against an empty
-package reports every core symbol as missing, which buries the real signal. Both
-activate once ``_IS_EN16931_FAMILY`` and ``_PRIMARY_INVOICE_CLASS`` are set from
-context-library/countries/sg.md, at which point the deferral branch is removed.
-
-CHECK 4 (version compatibility) and CHECK 5 (spec sources) are meaningful now and
-run unconditionally.
+CHECK 5 will still report BLOCKING findings from genuine remaining
+``[NEED:]`` markers in specs/README.md (UEN checksum, GST rate effective
+date, AP submission API base URL, etc.) — that is correct: this package is
+not ready to publish (Phase E) until those are resolved or a conscious
+decision is made to accept them.
 """
 
 from __future__ import annotations
@@ -35,7 +36,6 @@ from pathlib import Path
 from mcp_einvoicing_core.audit import (
     SEVERITY_BLOCKING,
     SEVERITY_OK,
-    SEVERITY_WARNING,
     AuditReport,
     CheckFinding,
     CheckResult,
@@ -57,20 +57,28 @@ _SOURCES = _ROOT / "specs" / "README.md"
 # CHECK 1 configuration — country-specific constants
 # ---------------------------------------------------------------------------
 
-# [NEED: invoice-tree pathway]
-# Read the pathway from context-library/countries/sg.md once a normative specification is
-# supplied under specs/. Setting this from memory is prohibited: the value must
-# come from the specification's conformance statement.
-#
-# ``None`` makes core skip the canonical invoice-tree sub-check, so CHECK 0
-# below raises the unresolved pathway as a BLOCKING finding in its place.
-_IS_EN16931_FAMILY: bool | None = None
-_PRIMARY_INVOICE_CLASS: tuple[str, str] | None = None
+# Pathway resolved 2026-08-27 per context-library/countries/sg.md,
+# "Invoice-tree pathway": both PINT-SG and SG Peppol BIS Billing 3.0 are
+# confirmed CIUS/extensions of EN 16931-1:2017.
+_IS_EN16931_FAMILY: bool | None = True
+_PRIMARY_INVOICE_CLASS: tuple[str, str] | None = (
+    f"{_MODULE}.models.invoice",
+    "SGInvoice",
+)
 
 _MODULES: list[str] = [
     f"{_MODULE}.server",
+    f"{_MODULE}.models.invoice",
+    f"{_MODULE}.wire_formats",
+    f"{_MODULE}.validators.schematron",
+    f"{_MODULE}.tools.invoice_tools",
 ]
 
+# Not yet exhaustively reconciled against every DEFAULT_CORE_MODULES symbol
+# (CHECK 1's [MISSING] findings are WARNING severity, not BLOCKING — see
+# mcp_einvoicing_core.audit.run_check_core_coverage). Phase D (2026-08-27)
+# covers invoice generation/validation only; a future pass should populate
+# this properly once Ordering/Access-Point work adds more core symbol usage.
 _INTENTIONAL_OVERRIDES: dict[str, set[str]] = {}
 
 
@@ -185,20 +193,6 @@ def run_check_5() -> CheckResult:
     return result
 
 
-def _deferred(check_id: str, name: str, reason: str) -> CheckResult:
-    result = CheckResult(check_id=check_id, name=name)
-    result.findings.append(
-        CheckFinding(
-            check_id=check_id,
-            tag="[DEFERRED]",
-            severity=SEVERITY_WARNING,
-            symbol=_PACKAGE,
-            message=reason,
-        )
-    )
-    return result
-
-
 def run_audit() -> AuditReport:
     """Execute all checks and return the aggregated AuditReport. No side effects."""
     report = make_report(_PACKAGE, _PYPROJECT)
@@ -206,29 +200,15 @@ def run_audit() -> AuditReport:
     check_0 = run_check_0()
     report.checks.append(check_0)
 
-    scaffold_stage = _IS_EN16931_FAMILY is None
-    if scaffold_stage:
-        report.checks.append(
-            _deferred(
-                "CHECK_1",
-                "Core interface coverage",
-                (
-                    "Deferred while the invoice-tree pathway is unresolved (CHECK 0). "
-                    "Running coverage against a package with no models reports every core "
-                    "symbol as missing and hides the real gate."
-                ),
-            )
+    report.checks.append(
+        run_check_core_coverage(
+            package_name=_PACKAGE,
+            package_modules=_MODULES,
+            intentional_overrides=_INTENTIONAL_OVERRIDES,
+            is_en16931_family=_IS_EN16931_FAMILY,
+            primary_invoice_class=_PRIMARY_INVOICE_CLASS,
         )
-    else:
-        report.checks.append(
-            run_check_core_coverage(
-                package_name=_PACKAGE,
-                package_modules=_MODULES,
-                intentional_overrides=_INTENTIONAL_OVERRIDES,
-                is_en16931_family=_IS_EN16931_FAMILY,
-                primary_invoice_class=_PRIMARY_INVOICE_CLASS,
-            )
-        )
+    )
 
     report.checks.append(
         run_check_version_compatibility(

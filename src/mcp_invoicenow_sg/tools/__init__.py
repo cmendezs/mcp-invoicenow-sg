@@ -1,4 +1,5 @@
-"""Tools for mcp-invoicenow-sg.
+"""Tools for mcp-invoicenow-sg."""
 
-Empty at scaffold stage. See context-library/countries/sg.md for the blocking [NEED:] items.
-"""
+from mcp_invoicenow_sg.tools.invoice_tools import register_invoice_tools
+
+__all__ = ["register_invoice_tools"]
