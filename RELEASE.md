@@ -49,6 +49,19 @@ those entries under the new version heading.
 
 ## Release history
 
+### v0.2.0 - 2026-08-28
+
+Removed the unlicensed bundled Peppol/PINT-SG Schematron overlay (`PINT-jurisdiction-aligned-
+rules.xslt` / `PINT-UBL-validation-preprocessed.xslt`) shipped in v0.1.0's wheel — no confirmed
+redistribution rights, same gap `context-library/decisions/peppol-schematron-artifact.md`
+identified for `mcp-einvoicing-be`/`mcp-ksef-pl`. `validate_invoice_sg` now runs IRAS's C5
+acceptance layer only; core's shared `en16931_base_schematron_validator()` is wired but not
+activated pending a sourced GST-category ↔ UNCL5305 crosswalk (`[CORE-EN16931-BASE-SG-
+CROSSWALK-1]` in `context-library/roadmap-2026.md`). Real, documented coverage loss: PINT-SG's
+own jurisdiction rules (e.g. `invoice_uuid`/`BR-108-GST-SG`) are no longer checked — see
+`EN16931_BASE_UNAVAILABLE_WARNING` in every `validate_invoice_sg` result. Full changelog:
+[`CHANGELOG.md`](CHANGELOG.md).
+
 ### v0.1.0 - 2026-08-28 (first release)
 
 PINT-SG v1.4.1 / SG Peppol BIS Billing 3.0 sent-invoice support (`SGInvoice`), UBL 2.1
