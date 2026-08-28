@@ -29,18 +29,27 @@ shared validation engine, EN 16931 abstractions, and Peppol network utilities.
 - **SG Peppol BIS Billing 3.0** — legacy profile, predates the PINT programme.
 - Both are EN 16931-conformant; the invoice model extends
   `mcp_einvoicing_core.en16931.EN16931Invoice`.
-- Validation runs the real PINT-SG Schematron (base + jurisdiction rulesets) plus IRAS's own C5
-  acceptance layer — a document can be PINT-SG-conformant and still be rejected by IRAS (e.g. a
-  missing buyer/seller UEN), and both outcomes are reported.
+- Validation runs IRAS's own C5 acceptance layer (`non_peppol_doc_validation`) — a first-party
+  government artifact, e.g. it flags a missing buyer/seller UEN. As of v0.2.0, PINT-SG's own
+  jurisdiction Schematron rules (e.g. the `invoice_uuid` requirement) are **not** checked — see
+  "Not yet supported" below.
 
 **Not yet supported** (see [`specs/README.md`](specs/README.md) and this monorepo's
 `context-library/countries/sg.md` for full detail):
+- **CEN EN16931 base and PINT-SG jurisdiction Schematron validation.** v0.1.0 bundled a
+  self-compiled derivative of OpenPeppol's PINT-SG jurisdiction Schematron with no confirmed
+  redistribution rights; it was removed in v0.2.0 (2026-08-28). The shared, properly-licensed
+  core CEN EN16931 base validator is wired but not yet activated for SG — `SGInvoice`'s IRAS
+  GST category codes have no sourced crosswalk to the UNCL5305 code list that validator requires.
+  See `EN16931_BASE_UNAVAILABLE_WARNING` in every `validate_invoice_sg` result and this
+  monorepo's `context-library/roadmap-2026.md` (`[CORE-EN16931-BASE-SG-CROSSWALK-1]`) for what
+  would unblock it.
 - The Peppol Ordering message family (`Order`, `OrderResponse`, etc.) and IMDA's SG-specific
   Order Balance.
 - Submission to an IMDA-accredited Access Point — no publicly available document states an
   Access Point's actual API base URL or authentication flow; this package builds and validates
   documents, it does not transmit them.
-- SG Peppol BIS Billing 3.0 Schematron validation — only PINT-SG's rule sets are bundled.
+- SG Peppol BIS Billing 3.0 Schematron validation — no rule set is bundled for this profile.
 - The received/purchase-side invoice model (`LocalTaxInvoice`, TX2_Annex Annex B Type 1B).
 
 ---
@@ -53,7 +62,7 @@ shared validation engine, EN 16931 abstractions, and Peppol network utilities.
 - [`mcp-einvoicing-core`](https://github.com/cmendezs/mcp-einvoicing-core) (installed
   automatically as a dependency)
 - Optional: the `xslt2` extra (`pip install mcp-invoicenow-sg[xslt2]`) — required for
-  `validate_invoice_sg` to run. The bundled PINT-SG and IRAS C5 stylesheets require XSLT 2.0.
+  `validate_invoice_sg` to run. The bundled IRAS C5 stylesheet requires XSLT 2.0.
 
 ### Using `uvx` (recommended)
 
@@ -105,7 +114,7 @@ Add the server to your MCP client configuration:
 | Tool | Description |
 |---|---|
 | `generate_invoice_sg` | Build an `SGInvoice` from structured data and serialize it to UBL 2.1 XML. |
-| `validate_invoice_sg` | Validate a UBL 2.1 invoice against PINT-SG's Schematron rulesets plus IRAS's C5 acceptance layer. |
+| `validate_invoice_sg` | Validate a UBL 2.1 invoice against IRAS's C5 acceptance layer (CEN EN16931 base and PINT-SG jurisdiction Schematron are not yet checked — see "Not yet supported" above). |
 | `get_gst_category_codes_sg` | Return the IRAS GST category codes (Annex E) accepted on Singapore invoices. |
 | `get_profile_urn_sg` | Return the CustomizationID (BT-24) and ProfileID (BT-23) for a given profile (`PINT_SG` or `BIS3`). |
 
