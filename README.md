@@ -46,9 +46,14 @@ shared validation engine, EN 16931 abstractions, and Peppol network utilities.
   would unblock it.
 - The Peppol Ordering message family (`Order`, `OrderResponse`, etc.) and IMDA's SG-specific
   Order Balance.
-- Submission to an IMDA-accredited Access Point — no publicly available document states an
-  Access Point's actual API base URL or authentication flow; this package builds and validates
-  documents, it does not transmit them.
+- **UBL 2.1 XSD structural validation.** Proven correct against a real UBL 2.1 schema in this
+  package's own test suite (a test-only fixture, not shipped in the wheel), but not wired into
+  the `validate_invoice_sg` tool: the OASIS UBL 2.1 schema files needed carry no
+  locally-confirmed redistribution grant.
+- **IRAS's own Invoice Data Submission API** (the 5th-corner "C5" copy specifically, as
+  distinct from generic Peppol AS4 transport, which the Peppol tools below do support) — no
+  publicly available document states an IMDA-accredited Access Point's actual API base URL or
+  authentication flow.
 - SG Peppol BIS Billing 3.0 Schematron validation — no rule set is bundled for this profile.
 - The received/purchase-side invoice model (`LocalTaxInvoice`, TX2_Annex Annex B Type 1B).
 
@@ -106,6 +111,7 @@ Add the server to your MCP client configuration:
 | Variable | Required | Default | Description |
 |---|---|---|---|
 | `LOG_LEVEL` | No | `INFO` | Logging level: `DEBUG`, `INFO`, `WARNING`, or `ERROR` |
+| `EINVOICING_PEPPOL_CODELIST_DIR` | No | — | Local directory containing your own copy of the OpenPeppol eDEC Code Lists, required by the `list_*`/`check_*` Peppol codelist tools (not bundled with this package; see `mcp-einvoicing-core` README). Participant lookup, AS4 send, and directory search work without it. |
 
 ---
 
@@ -114,13 +120,33 @@ Add the server to your MCP client configuration:
 | Tool | Description |
 |---|---|
 | `generate_invoice_sg` | Build an `SGInvoice` from structured data and serialize it to UBL 2.1 XML. |
-| `validate_invoice_sg` | Validate a UBL 2.1 invoice against IRAS's C5 acceptance layer (CEN EN16931 base and PINT-SG jurisdiction Schematron are not yet checked — see "Not yet supported" above). |
+| `validate_invoice_sg` | Validate a UBL 2.1 invoice against IRAS's C5 acceptance layer (CEN EN16931 base, PINT-SG jurisdiction Schematron, SG BIS 3.0, and UBL 2.1 XSD structural validation are not checked — see "Not yet supported" above). |
 | `get_gst_category_codes_sg` | Return the IRAS GST category codes (Annex E) accepted on Singapore invoices. |
 | `get_profile_urn_sg` | Return the CustomizationID (BT-24) and ProfileID (BT-23) for a given profile (`PINT_SG` or `BIS3`). |
 
 **Recommended workflow:** `get_profile_urn_sg` to pick the profile pair, then
 `generate_invoice_sg` with that pair in the invoice data, then `validate_invoice_sg` on the
 result.
+
+### Peppol tools
+
+Generic Peppol network tools (participant lookup, AS4 send, directory search, eDEC codelists)
+are also registered, from `mcp_einvoicing_core.peppol.tools`, with bare Singapore UENs
+normalized to scheme `0195` participant IDs:
+
+| Tool | Description |
+|---|---|
+| `peppol_lookup_participant` | Check whether a business is registered on the Peppol network; returns registration status and supported document types |
+| `peppol_get_service_endpoint` | Fetch the AS4 endpoint for a participant's document type |
+| `resolve_peppol_dns` | DNS-only (SML) diagnostic, independent of SMP reachability |
+| `peppol_send` | Transmit a UBL/CII invoice via AS4 |
+| `peppol_directory_search` | Search the public Peppol Directory by participant, name, country, or document type |
+| `list_participant_id_schemes`, `list_document_type_ids`, `list_process_ids`, `list_spis_use_case_ids` | OpenPeppol eDEC codelist lookups (require `EINVOICING_PEPPOL_CODELIST_DIR`) |
+| `check_document_type_id_in_codelist`, `check_process_id_in_codelist`, `check_participant_id_scheme_in_codelist`, `get_peppol_codelist_version` | OpenPeppol eDEC codelist checks and version reporting |
+
+`peppol_send` is generic Peppol AS4 transport to the recipient's Access Point — it is not the
+same as submission to IRAS's own C5 corner, which stays unsupported (see "Not yet supported"
+above).
 
 The tool reference in [`docs/TOOLS.md`](docs/TOOLS.md) is generated from the running server:
 
