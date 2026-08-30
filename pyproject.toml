@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mcp-invoicenow-sg"
-version = "0.2.0"
+version = "0.3.0"
 description = "MCP server for Singapore electronic invoicing (InvoiceNow)"
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -38,14 +38,14 @@ requires-python = ">=3.11"
 # The upper-bound pin on mcp-einvoicing-core is mandatory: uv bug #9811 strips version
 # pins from built wheel metadata, so this is the only protection downstream consumers have.
 dependencies = [
-    "mcp-einvoicing-core>=1.24.0,<2.0.0",
+    "mcp-einvoicing-core>=1.26.0,<2.0.0",
     "fastmcp>=2.0.0",
     "pydantic>=2.0.0",
     "lxml>=5.0.0",
 ]
 
 [project.optional-dependencies]
-xslt2 = ["mcp-einvoicing-core[xslt2]>=1.20.0"]
+xslt2 = ["mcp-einvoicing-core[xslt2]>=1.26.0"]
 dev = [
     "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0",

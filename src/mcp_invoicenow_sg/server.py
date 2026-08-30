@@ -11,8 +11,23 @@ document).
 """
 
 from mcp_einvoicing_core import EInvoicingMCPServer
+from mcp_einvoicing_core.peppol.tools import register_peppol_tools
 
 from mcp_invoicenow_sg.tools import register_invoice_tools
+
+
+def _sg_id_adapter(identifier: str) -> str:
+    """Normalize a bare Singapore UEN to a Peppol participant ID.
+
+    Scheme 0195 is the Singapore Nationwide E-Invoice Framework (IMDA) —
+    see context-library/countries/sg.md, "Peppol participant identifier
+    scheme". Already scheme-qualified identifiers (containing ':') pass
+    through unchanged.
+    """
+    if ":" in identifier:
+        return identifier
+    return f"0195:{identifier}"
+
 
 _server = EInvoicingMCPServer(
     "mcp-invoicenow-sg",
@@ -22,10 +37,17 @@ _server = EInvoicingMCPServer(
         "**Invoice tools**:\n"
         "  • generate_invoice_sg: build an SGInvoice from structured data and serialize to "
         "UBL 2.1 XML\n"
-        "  • validate_invoice_sg: PINT-SG Schematron validation (base + jurisdiction rulesets; "
-        "SG BIS Billing 3.0 not yet covered)\n"
+        "  • validate_invoice_sg: IRAS's own C5 acceptance-layer Schematron (checks "
+        "documents IRAS itself would still reject, e.g. a missing buyer/seller UEN). The "
+        "CEN EN16931 base ruleset, PINT-SG's own jurisdiction overlay, SG Peppol BIS "
+        "Billing 3.0, and UBL 2.1 XSD structural validation are NOT checked — see the "
+        "result's `scope` field.\n"
         "  • get_gst_category_codes_sg: IRAS GST category codes (Annex E, supply side)\n"
         "  • get_profile_urn_sg: CustomizationID/ProfileID for 'PINT_SG' or 'BIS3'\n\n"
+        "**Peppol tools** (registered from mcp_einvoicing_core.peppol.tools): participant "
+        "lookup, AS4 send, and directory/DNS diagnostics work without extra setup. The "
+        "list_*/check_* codelist tools additionally need EINVOICING_PEPPOL_CODELIST_DIR set "
+        "to a local copy of the OpenPeppol eDEC Code Lists.\n\n"
         "**Recommended workflow**: get_profile_urn_sg(profile) to pick the CustomizationID, "
         "then generate_invoice_sg(invoice_data) with that value in invoice_data['profile'], "
         "then validate_invoice_sg(xml) on the result.\n\n"
@@ -38,6 +60,7 @@ _server = EInvoicingMCPServer(
 mcp = _server.mcp
 
 register_invoice_tools(mcp)
+_server.register_plugin(lambda m: register_peppol_tools(m, id_adapter=_sg_id_adapter), "peppol")
 
 
 def main() -> None:

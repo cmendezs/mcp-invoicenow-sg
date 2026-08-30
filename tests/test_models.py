@@ -55,8 +55,8 @@ def test_sg_invoice_rejects_unknown_gst_category(sg_invoice_data: dict) -> None:
         SGInvoice.model_validate(sg_invoice_data)
 
 
-def test_sg_invoice_rejects_malformed_invoice_uuid(sg_invoice_data: dict) -> None:
-    sg_invoice_data["invoice_uuid"] = "not-a-uuid"
+def test_sg_invoice_rejects_malformed_document_uuid(sg_invoice_data: dict) -> None:
+    sg_invoice_data["document_uuid"] = "not-a-uuid"
     with pytest.raises(ValidationError):
         SGInvoice.model_validate(sg_invoice_data)
 
@@ -71,6 +71,7 @@ def test_sg_invoice_currency_defaults_to_sgd(sg_invoice_data: dict) -> None:
             "postcode": "123456",
             "country_code": "SG",
         },
+        "uen": "200212345E",
     }
     sg_invoice_data["buyer"] = {
         "name": "Buyer",
@@ -80,9 +81,59 @@ def test_sg_invoice_currency_defaults_to_sgd(sg_invoice_data: dict) -> None:
             "postcode": "654321",
             "country_code": "SG",
         },
+        "uen": "200254321C",
     }
     invoice = SGInvoice.model_validate(sg_invoice_data)
     assert invoice.currency_code == "SGD"
+
+
+def test_sg_invoice_accepts_non_sgd_currency(sg_invoice_data: dict) -> None:
+    """SG-TC-1: currency_code is widened from a fixed 'SGD' Literal to any
+    3-letter code; SGD stays the default."""
+    sg_invoice_data["currency_code"] = "usd"
+    invoice = SGInvoice.model_validate(sg_invoice_data)
+    assert invoice.currency_code == "USD"
+
+
+def test_sg_invoice_rejects_malformed_currency_code(sg_invoice_data: dict) -> None:
+    sg_invoice_data["currency_code"] = "US1"
+    with pytest.raises(ValidationError):
+        SGInvoice.model_validate(sg_invoice_data)
+
+
+def test_sg_invoice_requires_document_uuid_for_mandatory_gst_category(
+    sg_invoice_data: dict,
+) -> None:
+    """SG-SC-1 / BR-108-GST-SG: category 'SR' is in SG_BR108_GST_SG_CATEGORIES,
+    so omitting document_uuid must fail."""
+    del sg_invoice_data["document_uuid"]
+    with pytest.raises(ValidationError, match="document_uuid"):
+        SGInvoice.model_validate(sg_invoice_data)
+
+
+def test_sg_invoice_document_uuid_optional_for_non_mandatory_category(
+    sg_invoice_data: dict,
+) -> None:
+    """'OS' (out of scope) is not in SG_BR108_GST_SG_CATEGORIES."""
+    del sg_invoice_data["document_uuid"]
+    sg_invoice_data["tax_lines"][0]["category"] = "OS"
+    sg_invoice_data["line_items"][0]["tax_category"] = "OS"
+    invoice = SGInvoice.model_validate(sg_invoice_data)
+    assert invoice.document_uuid is None
+
+
+def test_sg_invoice_requires_seller_uen(sg_invoice_data: dict) -> None:
+    """SG-SH-1 / IRASC5-026 (Seller, IBT-030)."""
+    del sg_invoice_data["seller"]["uen"]
+    with pytest.raises(ValidationError, match="seller.uen"):
+        SGInvoice.model_validate(sg_invoice_data)
+
+
+def test_sg_invoice_requires_buyer_uen(sg_invoice_data: dict) -> None:
+    """SG-SH-1 / IRASC5-034 (Buyer, IBT-047)."""
+    del sg_invoice_data["buyer"]["uen"]
+    with pytest.raises(ValidationError, match="buyer.uen"):
+        SGInvoice.model_validate(sg_invoice_data)
 
 
 def test_sg_party_accepts_valid_uen(sg_invoice_data: dict) -> None:

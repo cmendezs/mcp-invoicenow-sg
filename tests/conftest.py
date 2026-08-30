@@ -18,13 +18,14 @@ from mcp_invoicenow_sg.models import SG_PINT_CUSTOMIZATION_ID, SG_PINT_PROFILE_I
 def sg_invoice_data() -> dict:
     """A minimal, schematron-conformant PINT-SG invoice payload.
 
-    Field values (buyer_reference, due_date, invoice_uuid) are present
+    Field values (buyer_reference, due_date, document_uuid) are present
     because PINT-SG's own jurisdiction rules require them — see
-    models/invoice.py's SGInvoice.invoice_uuid docstring. That ruleset is no
-    longer bundled/checked by validate_invoice_sg (see
-    validators/schematron.py's module docstring), but the fixture keeps these
-    fields populated since SGInvoice still models and documents them as
-    PINT-SG requirements independent of what the validator currently checks.
+    models/invoice.py's SGInvoice.document_uuid docstring. document_uuid is
+    now enforced at the Pydantic layer itself (_require_document_uuid_for_gst_sg,
+    BR-108-GST-SG, SG-SC-1) since the tax_lines/line_items category below
+    ("SR") is in SG_BR108_GST_SG_CATEGORIES; it is also no longer checked by
+    the Schematron layer independently (see validators/schematron.py's module
+    docstring), but the fixture keeps it populated regardless.
     """
     address = {
         "line_one": "1 Example Street",
@@ -36,7 +37,7 @@ def sg_invoice_data() -> dict:
         "profile": SG_PINT_CUSTOMIZATION_ID,
         "business_process": SG_PINT_PROFILE_ID,
         "invoice_number": "INV001",
-        "invoice_uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        "document_uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         "invoice_date": date(2026, 8, 27),
         "due_date": date(2026, 9, 26),
         "buyer_reference": "PO-REF-001",

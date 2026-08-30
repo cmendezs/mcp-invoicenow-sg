@@ -57,34 +57,36 @@ def test_generated_invoice_round_trips_clean(sg_invoice: SGInvoice) -> None:
     assert result.valid is True, result.errors
 
 
-def test_invoice_missing_uuid_no_longer_caught_by_removed_jurisdiction_rule(
-    sg_invoice_data: dict,
-) -> None:
-    """Documents a real coverage loss, not a defect.
+def test_document_uuid_requirement_now_enforced_at_model_layer(sg_invoice_data: dict) -> None:
+    """SG-SC-1 (resolved) supersedes the old Schematron-layer-only coverage gap.
 
-    BR-108-GST-SG is a PINT-SG jurisdiction rule (invoice_uuid requirement) —
-    it lived in the bundled PINT-jurisdiction-aligned-rules.sch, which was
-    removed 2026-08-28 for lacking a redistribution grant (see
-    context-library/decisions/peppol-schematron-artifact.md and
-    validators/schematron.py's module docstring). A document missing
-    invoice_uuid is not caught by validate_invoice_sg — callers must be aware
-    of the reduced scope (result.metadata["scope"] /
-    EN16931_BASE_UNAVAILABLE_WARNING).
+    BR-108-GST-SG (document_uuid requirement) previously lived only in the
+    bundled PINT-jurisdiction-aligned-rules.sch, removed 2026-08-28 for
+    lacking a redistribution grant (context-library/decisions/
+    peppol-schematron-artifact.md). As of SG-SC-1, SGInvoice itself enforces
+    it (_require_document_uuid_for_gst_sg, see test_models.py) — a document
+    missing document_uuid can no longer even be constructed, so it never
+    reaches validate_invoice_sg to test the (still absent) Schematron-layer
+    coverage. See models/invoice.py for the model-level test coverage.
     """
-    del sg_invoice_data["invoice_uuid"]
-    invoice = SGInvoice.model_validate(sg_invoice_data)
-    xml = SGUBLSerializer().serialize(invoice)
-    result = SGDocumentValidator().validate(xml)
-    assert not any("BR-108-GST-SG" in e for e in result.errors)
+    del sg_invoice_data["document_uuid"]
+    with pytest.raises(ValueError, match="document_uuid"):
+        SGInvoice.model_validate(sg_invoice_data)
 
 
-def test_invoice_missing_buyer_uen_fails_iras_c5(sg_invoice_data: dict) -> None:
+def test_missing_buyer_uen_now_rejected_at_model_layer_too(sg_invoice_data: dict) -> None:
+    """SG-SH-1 (resolved): SGInvoice itself now requires both party UENs
+    (_require_party_uens, see test_models.py), so this can no longer reach
+    the serializer/validator at all — it fails at model_validate. The IRAS
+    C5 Schematron layer (IRASC5-034) that used to be the only thing catching
+    this stays wired as defense in depth for XML built outside SGInvoice
+    (e.g. hand-authored or third-party documents)."""
     del sg_invoice_data["buyer"]["uen"]
-    invoice = SGInvoice.model_validate(sg_invoice_data)
-    xml = SGUBLSerializer().serialize(invoice)
-    result = SGDocumentValidator().validate(xml)
-    assert result.valid is False
-    assert any("IRASC5-034" in e for e in result.errors)
+    with pytest.raises(ValueError, match="buyer.uen"):
+        SGInvoice.model_validate(sg_invoice_data)
+    # IRASC5-034 stays wired as defense in depth for XML that never went
+    # through SGInvoice (e.g. hand-authored or third-party documents) — see
+    # test_official_sample_fails_iras_c5 above for that coverage.
 
 
 def test_get_schema_version() -> None:

@@ -88,6 +88,23 @@ stating the GST-category ↔ UNCL5305 correspondence.
 Callers must install mcp-invoicenow-sg[xslt2] for validate_invoice_sg to
 produce a real result; get_sg_validator() surfaces a missing saxonche install
 as SgStylesheetUnsupportedError rather than letting ImportError propagate.
+
+UBL 2.1 XSD structural validation (SG-SC-3, audit/2026-08-audit-sg.md) is NOT
+wired into validate_invoice_sg, despite core providing a working XSDValidator
+(core >=1.20.0): the OASIS UBL 2.1 schema files this would need to bundle
+carry only a bare "Copyright (c) OASIS Open 2013. All Rights Reserved."
+notice, no explicit redistribution grant, in any locally-supplied copy — the
+same absence-of-grant class of finding that made mcp-einvoicing-ae remove its
+bundled peppol-tdd-1.0.0.xsd in v0.2.0 (see that package's
+validators/schematron.py and context-library/decisions/
+specs-directory-convention.md, "Bundling into the shipped wheel"). Per user
+decision 2026-08-30, this package follows the same precedent: no OASIS
+content ships in the wheel. The fix to core's own `_build_party` element
+ordering (core v1.26.0 — see mcp-einvoicing-core's changelog) is verified
+against a real UBL 2.1 schema in a test-only fixture
+(tests/fixtures/ubl-2.1/, mirroring mcp-einvoicing-core's own equivalent),
+not a production capability. Tracked as [NEED: OASIS UBL 2.1 redistribution
+grant] in context-library/roadmap-2026.md.
 """
 
 from __future__ import annotations
@@ -213,7 +230,8 @@ class SGDocumentValidator(BaseDocumentValidator):
 
     See the module docstring ("Why en16931_base is not run") and
     EN16931_BASE_UNAVAILABLE_WARNING, which is included in every result.
-    BIS 3.0 is not covered either — see the module docstring.
+    BIS 3.0 and UBL 2.1 XSD structural validation are not covered either —
+    see the module docstring.
     """
 
     def get_schema_version(self) -> str:
@@ -234,8 +252,9 @@ class SGDocumentValidator(BaseDocumentValidator):
         metadata: dict = {
             "rulesets_run": [],
             "scope": "iras-c5-only (EN16931 base, PINT-SG jurisdiction overlay, "
-            "and SG BIS 3.0 not checked — see EN16931_BASE_UNAVAILABLE_WARNING "
-            "and peppol-schematron-artifact.md)",
+            "SG BIS 3.0, and UBL 2.1 XSD structural validation not checked — see "
+            "EN16931_BASE_UNAVAILABLE_WARNING, peppol-schematron-artifact.md, and "
+            "this module's docstring for why XSD is unavailable)",
         }
 
         for ruleset in _ACTIVE_RULESETS:
