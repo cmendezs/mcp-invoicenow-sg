@@ -49,6 +49,20 @@ those entries under the new version heading.
 
 ## Release history
 
+### v0.3.0 - 2026-08-30
+
+Resolves all 8 findings from the first SG compliance audit (`audit/2026-08-audit-sg.md`):
+mandatory `cbc:UUID` for GST categories requiring it (SG-SC-1, migrated onto core's
+`document_uuid` field, core >=1.26.0), mandatory seller/buyer UEN (SG-SH-1), corrected
+`validate_invoice_sg` instructions (SG-SC-2), a test-only proof that core's UBL 2.1
+`_build_party` ordering fix (core v1.26.0) makes SG's own serializer output genuinely XSD-valid
+(SG-SC-3, partial — production XSD validation stays unwired pending a confirmed OASIS UBL 2.1
+redistribution grant, same posture as `mcp-einvoicing-ae`'s v0.2.0 TDD-XSD removal), widened
+`currency_code` with `TaxCurrencyCode` emission (SG-TC-1), registered Peppol participant-lookup
+tools (SG-LC-2), and a fully populated audit-gate override list (SG-AG-1, now 0 blocking / 0
+warnings). Core dependency floor bumped to `>=1.26.0,<2.0.0`. Full changelog:
+[`CHANGELOG.md`](CHANGELOG.md).
+
 ### v0.2.0 - 2026-08-28
 
 Removed the unlicensed bundled Peppol/PINT-SG Schematron overlay (`PINT-jurisdiction-aligned-

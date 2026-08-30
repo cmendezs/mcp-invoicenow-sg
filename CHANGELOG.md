@@ -9,6 +9,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-08-30
+
+Resolves all 8 findings from the first SG compliance audit
+(`audit/2026-08-audit-sg.md`).
+
+### Added
+- `SGInvoice` model validator (`_require_document_uuid_for_gst_sg`) requiring
+  `document_uuid` (`cbc:UUID`, BT-SG-003) whenever any tax line/line
+  item/allowance uses a GST category in the new `SG_BR108_GST_SG_CATEGORIES`
+  constant (`BR-108-GST-SG`) — SG-SC-1 (HIGH).
+- `SGInvoice` model validator (`_require_party_uens`) requiring both
+  `seller.uen` and `buyer.uen` (`IRASC5-026`/`IRASC5-034`) — SG-SH-1.
+- `cbc:TaxCurrencyCode="SGD"` emission (BR-53 position) whenever
+  `currency_code` differs from SGD — SG-TC-1.
+- `server.py` registers core's `register_peppol_tools` with an SG id adapter
+  (scheme `0195`, bare UEN) — SG-LC-2.
+- `_INTENTIONAL_OVERRIDES` populated in `audit/audit_vs_core.py` across 13
+  core modules — SG-AG-1. Audit gate: 0 blocking / 0 warnings.
+
+### Changed
+- `document_uuid` migrated onto core's own `EN16931Invoice.document_uuid`
+  field (core >=1.25.0); the SG-specific `invoice_uuid` field and its manual
+  serializer insertion are removed — `SGUBLSerializer` no longer builds
+  `cbc:UUID` itself.
+- `currency_code` widened from a fixed `"SGD"` `Literal` to any 3-letter ISO
+  4217 shape (still defaulting to SGD) — SG-TC-1.
+- `server.py`'s MCP instructions corrected to match the already-accurate
+  `validate_invoice_sg` tool docstring (IRAS C5 acceptance layer only,
+  UBL 2.1 XSD structural validation NOT checked) — SG-SC-2.
+- Core dependency floor bumped to `mcp-einvoicing-core>=1.26.0,<2.0.0`
+  (needed for the `_build_party` UBL 2.1 element-ordering fix).
+
+### Fixed
+- **[Confirmed]** Core's `EN16931UBLSerializer._build_party` emitted
+  `cac:Party` children out of UBL 2.1 `xsd:sequence` order — fixed in
+  `mcp-einvoicing-core` v1.26.0 (see that package's changelog). Proved via a
+  new test-only XSD-validation test that SG's own serializer output is
+  genuinely UBL 2.1-valid once the core fix is applied (SG-SC-3, partial —
+  see below).
+
+### Known limitation (not resolved)
+- **SG-SC-3 stays partial.** UBL 2.1 XSD structural validation is proven via
+  a test-only regression (`tests/fixtures/ubl-2.1/`) but is **not** wired
+  into production `validate_invoice_sg` or shipped in the wheel: the OASIS
+  UBL 2.1 schema files carry no locally-confirmed redistribution grant,
+  following the same precedent `mcp-einvoicing-ae` set in v0.2.0 when it
+  removed a bundled `peppol-tdd-1.0.0.xsd`. Tracked as `[NEED: OASIS UBL 2.1
+  redistribution grant]` in `context-library/roadmap-2026.md`.
+
 ## [0.2.0] - 2026-08-28
 
 ### Fixed
