@@ -6,7 +6,7 @@
 
 [![PyPI version](https://badge.fury.io/py/mcp-invoicenow-sg.svg)](https://badge.fury.io/py/mcp-invoicenow-sg)
 [![Python](https://img.shields.io/pypi/pyversions/mcp-invoicenow-sg.svg)](https://pypi.org/project/mcp-invoicenow-sg/)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![mcp-invoicenow-sg MCP server](https://glama.ai/mcp/servers/cmendezs/mcp-invoicenow-sg/badges/score.svg)](https://glama.ai/mcp/servers/cmendezs/mcp-invoicenow-sg)
 
 ---
 
