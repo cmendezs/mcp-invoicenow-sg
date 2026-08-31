@@ -50,18 +50,18 @@ SG_PINT_CUSTOMIZATION_ID: str = "urn:peppol:pint:billing-1@sg-1"
 SG_PINT_PROFILE_ID: str = "urn:peppol:bis:billing"
 
 SG_BIS3_CUSTOMIZATION_ID: str = (
-    "urn:cen.eu:en16931:2017#conformant#"
-    "urn:fdc:peppol.eu:2017:poacc:billing:international:sg:3.0"
+    "urn:cen.eu:en16931:2017#conformant#urn:fdc:peppol.eu:2017:poacc:billing:international:sg:3.0"
 )
 SG_BIS3_PROFILE_ID: str = "urn:fdc:peppol.eu:2017:poacc:billing:01:1.0"
 
 # LocalTaxInvoice — purchase-side (Type 1B) only, not used by SGInvoice.
 # Recorded here so a future purchase-side model has a single citable source.
 SG_LOCAL_TAX_INVOICE_BIS_CUSTOMIZATION_ID: str = (
-    "urn:cen.eu:en16931:2017#conformant#"
-    "urn:fdc:peppol.eu:2017:poacc:billing:LocalTaxInvoice:sg:1.0"
+    "urn:cen.eu:en16931:2017#conformant#urn:fdc:peppol.eu:2017:poacc:billing:LocalTaxInvoice:sg:1.0"
 )
-SG_LOCAL_TAX_INVOICE_PINT_CUSTOMIZATION_ID: str = "urn:peppol:pint:billing-1@sg-1:LocalTaxInvoice:sg:1.0"
+SG_LOCAL_TAX_INVOICE_PINT_CUSTOMIZATION_ID: str = (
+    "urn:peppol:pint:billing-1@sg-1:LocalTaxInvoice:sg:1.0"
+)
 SG_LOCAL_TAX_INVOICE_PAYABLES_PROFILE_ID_BIS: str = "urn:fdc:peppol.eu:2017:poacc:Payables:01:1.0"
 SG_LOCAL_TAX_INVOICE_PAYABLES_PROFILE_ID_PINT: str = "urn:peppol:bis:Payables"
 
@@ -252,7 +252,8 @@ class SGInvoice(EN16931Invoice):
 
     profile: SGInvoiceProfile = Field(..., description="GuidelineID / profile URN (BT-24)")
     business_process: SGInvoiceProfileId = Field(
-        ..., description="Business process type / ProfileID (BT-23) — mandatory, must pair with `profile`"
+        ...,
+        description="Business process type / ProfileID (BT-23) — mandatory, must pair with `profile`",
     )
     document_uuid: str | None = Field(
         None,
@@ -270,7 +271,9 @@ class SGInvoice(EN16931Invoice):
         ),
         pattern=r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
     )
-    seller: SGParty = Field(..., description="Seller (BG-4) — UEN mandatory, see _require_party_uens")
+    seller: SGParty = Field(
+        ..., description="Seller (BG-4) — UEN mandatory, see _require_party_uens"
+    )
     buyer: SGParty = Field(..., description="Buyer (BG-7) — UEN mandatory, see _require_party_uens")
     currency_code: Annotated[str, Field(min_length=3, max_length=3)] = Field(
         "SGD",
@@ -286,9 +289,7 @@ class SGInvoice(EN16931Invoice):
             "CodelistNotConfiguredError otherwise."
         ),
     )
-    tax_lines: list[SGTax] = Field(
-        default_factory=list, description="GST breakdown lines (BG-23)"
-    )
+    tax_lines: list[SGTax] = Field(default_factory=list, description="GST breakdown lines (BG-23)")
     allowances_charges: list[SGAllowanceCharge] = Field(
         default_factory=list, description="Document-level allowances (BG-20) and charges (BG-21)"
     )

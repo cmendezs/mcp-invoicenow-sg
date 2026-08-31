@@ -44,7 +44,9 @@ def register_invoice_tools(mcp: FastMCP) -> None:
     async def generate_invoice_sg(
         invoice_data: Annotated[
             dict[str, Any],
-            Field(description="Invoice fields matching the SGInvoice schema (see get_profile_urn_sg for the profile URN to set)."),
+            Field(
+                description="Invoice fields matching the SGInvoice schema (see get_profile_urn_sg for the profile URN to set)."
+            ),
         ],
     ) -> dict[str, Any]:
         """Build an SGInvoice from structured data and serialize it to UBL 2.1 XML.
@@ -126,9 +128,7 @@ def register_invoice_tools(mcp: FastMCP) -> None:
 
     @mcp.tool()
     async def get_profile_urn_sg(
-        profile: Annotated[
-            str, Field(description="Profile key: 'PINT_SG' or 'BIS3'.")
-        ],
+        profile: Annotated[str, Field(description="Profile key: 'PINT_SG' or 'BIS3'.")],
     ) -> dict[str, Any]:
         """Return the CustomizationID (BT-24) and ProfileID (BT-23) for a Singapore profile.
 

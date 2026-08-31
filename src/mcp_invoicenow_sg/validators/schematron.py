@@ -200,9 +200,7 @@ def get_sg_validator(ruleset: str) -> BaseStructuredValidator:
         return validator
 
     if ruleset not in SUPPORTED_SG_RULESETS:
-        msg = (
-            f"Unsupported SG ruleset: {ruleset!r}. Supported: {', '.join(SUPPORTED_SG_RULESETS)}."
-        )
+        msg = f"Unsupported SG ruleset: {ruleset!r}. Supported: {', '.join(SUPPORTED_SG_RULESETS)}."
         raise UnsupportedSgRulesetError(msg)
 
     try:
