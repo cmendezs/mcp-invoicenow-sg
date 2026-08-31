@@ -20,8 +20,6 @@ invoices (originally-issued invoices, not the received/purchase side). It is par
 [`mcp-einvoicing-core`](https://github.com/cmendezs/mcp-einvoicing-core), which provides the
 shared validation engine, EN 16931 abstractions, and Peppol network utilities.
 
----
-
 ## Supported standards
 
 - **PINT-SG v1.4.1** (`urn:peppol:pint:billing-1@sg-1`) — the recommended profile for new
@@ -57,8 +55,6 @@ shared validation engine, EN 16931 abstractions, and Peppol network utilities.
 - SG Peppol BIS Billing 3.0 Schematron validation — no rule set is bundled for this profile.
 - The received/purchase-side invoice model (`LocalTaxInvoice`, TX2_Annex Annex B Type 1B).
 
----
-
 ## Installation
 
 ### Requirements
@@ -89,11 +85,20 @@ cd mcp-invoicenow-sg
 uv sync --all-extras
 ```
 
----
-
 ## Configuration
 
-Add the server to your MCP client configuration:
+### Environment variables
+
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `LOG_LEVEL` | No | `INFO` | Logging level: `DEBUG`, `INFO`, `WARNING`, or `ERROR` |
+| `EINVOICING_PEPPOL_CODELIST_DIR` | No | — | Local directory containing your own copy of the OpenPeppol eDEC Code Lists, required by the `list_*`/`check_*` Peppol codelist tools (not bundled with this package; see `mcp-einvoicing-core` README). Participant lookup, AS4 send, and directory search work without it. |
+
+This server needs no credentials to run.
+
+## Claude Desktop integration
+
+To use this server with Claude, add this configuration to your `claude_desktop_config.json` file:
 
 ```json
 {
@@ -106,16 +111,47 @@ Add the server to your MCP client configuration:
 }
 ```
 
-### Environment variables
+## Cursor integration
 
-| Variable | Required | Default | Description |
-|---|---|---|---|
-| `LOG_LEVEL` | No | `INFO` | Logging level: `DEBUG`, `INFO`, `WARNING`, or `ERROR` |
-| `EINVOICING_PEPPOL_CODELIST_DIR` | No | — | Local directory containing your own copy of the OpenPeppol eDEC Code Lists, required by the `list_*`/`check_*` Peppol codelist tools (not bundled with this package; see `mcp-einvoicing-core` README). Participant lookup, AS4 send, and directory search work without it. |
+Cursor supports MCP servers via stdio. Add the configuration in:
+- **Global** (all projects): `~/.cursor/mcp.json`
+- **Project** (this repository only): `.cursor/mcp.json`
 
----
+```json
+{
+  "mcpServers": {
+    "invoicenow-sg": {
+      "command": "uvx",
+      "args": ["mcp-invoicenow-sg"]
+    }
+  }
+}
+```
 
-## Tools
+Reload the Cursor window (`Ctrl+Shift+P` then *Reload Window*) to apply the changes.
+
+## Kiro integration
+
+Kiro supports MCP servers via its dedicated configuration file. Two levels are available:
+- **Global** (all projects): `~/.kiro/settings/mcp.json`
+- **Workspace** (this repository only): `.kiro/settings/mcp.json`
+
+```json
+{
+  "mcpServers": {
+    "invoicenow-sg": {
+      "command": "uvx",
+      "args": ["mcp-invoicenow-sg"],
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+The file is automatically reloaded on save. You can also open the config via the command palette (`Cmd+Shift+P` / `Ctrl+Shift+P`) then *MCP*.
+
+## Available tools
 
 | Tool | Description |
 |---|---|
@@ -154,15 +190,11 @@ The tool reference in [`docs/TOOLS.md`](docs/TOOLS.md) is generated from the run
 uv run python scripts/gen_tool_reference.py
 ```
 
----
-
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, the test and lint commands, and
 the pull request checklist. Security issues follow the private disclosure process in
 [SECURITY.md](SECURITY.md).
-
----
 
 ## Other e-invoicing MCP servers
 
@@ -179,8 +211,6 @@ the pull request checklist. Security issues follow the private disclosure proces
 | 🇪🇸 Spain | [mcp-facturacion-electronica-es](https://github.com/cmendezs/mcp-facturacion-electronica-es) |
 | 🇦🇪 United Arab Emirates | [mcp-einvoicing-ae](https://github.com/cmendezs/mcp-einvoicing-ae) |
 
----
-
 ## License
 
-This project is licensed under the **Apache 2.0** license — see [LICENSE](LICENSE) for details.
+This project is licensed under the **Apache 2.0** license — see [LICENSE](LICENSE) for details. For the full version history, see [CHANGELOG.md](CHANGELOG.md).
