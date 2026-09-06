@@ -1,0 +1,17 @@
+# mcp-invoicenow-sg
+
+> MCP server for Singapore electronic invoicing (InvoiceNow)
+
+## Docs
+
+- [Overview](https://cmendezs.github.io/mcp-invoicenow-sg/): the full README — what this server does, installation, configuration, available tools
+- [Tools](https://cmendezs.github.io/mcp-invoicenow-sg/tools/): full MCP tool reference
+- [Changelog](https://cmendezs.github.io/mcp-invoicenow-sg/changelog/): version history
+- [Contributing](https://cmendezs.github.io/mcp-invoicenow-sg/contributing/): dev setup and PR checklist
+- [Security](https://cmendezs.github.io/mcp-invoicenow-sg/security/): vulnerability disclosure policy
+
+## Links
+
+- [PyPI](https://pypi.org/project/mcp-invoicenow-sg/)
+- [MCP registry](https://registry.modelcontextprotocol.io/v0/servers?search=io.github.cmendezs/mcp-invoicenow-sg)
+- [GitHub](https://github.com/cmendezs/mcp-invoicenow-sg)
