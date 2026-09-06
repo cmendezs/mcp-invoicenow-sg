@@ -49,6 +49,16 @@ those entries under the new version heading.
 
 ## Release history
 
+### v0.3.1 - 2026-09-06
+
+CI-only fix, no behavior change: resolved `mypy` type errors that were live CI failures (this
+package's `ci.yml` has no `continue-on-error` on the `mypy` step, unlike most others in the
+fleet). `SGLineItem.line_allowances`/`SGInvoice.tax_lines`/`allowances_charges`/`line_items`
+narrow their base class's field type to a jurisdiction-specific subclass — the intended
+subclassing pattern — and are now annotated `# type: ignore[assignment]`, matching the existing
+`mcp-cfdi-mx` precedent. `IRASC5Validator.validate` replaced a bare `metadata: dict` local with
+typed locals. Full changelog: [`CHANGELOG.md`](CHANGELOG.md).
+
 ### v0.3.0 - 2026-08-30
 
 Resolves all 8 findings from the first SG compliance audit (`audit/2026-08-audit-sg.md`):
