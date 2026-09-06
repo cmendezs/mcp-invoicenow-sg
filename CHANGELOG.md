@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-09-06
+
+### Fixed
+- **CI: `mypy` type errors resolved (no behavior change).** `SGLineItem.line_allowances`,
+  `SGInvoice.tax_lines`, `SGInvoice.allowances_charges`, and `SGInvoice.line_items`
+  (`models/invoice.py`) narrow their base class's field type to a jurisdiction-specific
+  subclass — the intended, documented subclassing pattern (see the root `CLAUDE.md`'s
+  "Canonical invoice tree" rules) — but `list` is invariant, so mypy's structural check flags
+  the narrowing; annotated `# type: ignore[assignment]` on each, matching the same pattern
+  already used in `mcp-cfdi-mx`. `IRASC5Validator.validate` (`validators/schematron.py`)
+  replaced a bare, unparameterized `metadata: dict` local with typed locals
+  (`rulesets_run: list[str]`, `scope: str`) assembled into the returned metadata dict, avoiding
+  `dict`'s missing type-arguments error. `ci.yml`'s `mypy` step has no `continue-on-error` for
+  this package (unlike most others in the fleet), so these were live CI failures, not
+  documented pre-existing debt.
+
 ## [0.3.0] - 2026-08-30
 
 Resolves all 8 findings from the first SG compliance audit

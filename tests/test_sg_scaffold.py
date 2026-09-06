@@ -10,7 +10,7 @@ from mcp_invoicenow_sg.server import main, mcp
 
 
 def test_version_matches_pyproject() -> None:
-    assert mcp_invoicenow_sg.__version__ == "0.3.0"
+    assert mcp_invoicenow_sg.__version__ == "0.3.1"
 
 
 def test_server_exposes_a_runnable_entry_point() -> None:

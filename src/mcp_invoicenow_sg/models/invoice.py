@@ -222,7 +222,7 @@ class SGLineItem(EN16931LineItem):
     tax_category: SGGSTCategoryCode = Field(
         ..., description="IRAS GST category code (BT-151), e.g. 'SR', 'ZR', 'ES33'"
     )
-    line_allowances: list[SGAllowanceCharge] = Field(
+    line_allowances: list[SGAllowanceCharge] = Field(  # type: ignore[assignment]
         default_factory=list, description="Line-level allowances and charges (BG-27 / BG-28)"
     )
 
@@ -289,11 +289,15 @@ class SGInvoice(EN16931Invoice):
             "CodelistNotConfiguredError otherwise."
         ),
     )
-    tax_lines: list[SGTax] = Field(default_factory=list, description="GST breakdown lines (BG-23)")
-    allowances_charges: list[SGAllowanceCharge] = Field(
+    tax_lines: list[SGTax] = Field(  # type: ignore[assignment]
+        default_factory=list, description="GST breakdown lines (BG-23)"
+    )
+    allowances_charges: list[SGAllowanceCharge] = Field(  # type: ignore[assignment]
         default_factory=list, description="Document-level allowances (BG-20) and charges (BG-21)"
     )
-    line_items: list[SGLineItem] = Field(default_factory=list, description="Invoice lines (BG-25)")
+    line_items: list[SGLineItem] = Field(  # type: ignore[assignment]
+        default_factory=list, description="Invoice lines (BG-25)"
+    )
 
     @model_validator(mode="after")
     def _check_business_process_pair(self) -> SGInvoice:

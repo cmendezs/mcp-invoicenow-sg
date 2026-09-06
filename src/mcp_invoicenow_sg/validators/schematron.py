@@ -247,13 +247,13 @@ class SGDocumentValidator(BaseDocumentValidator):
 
         errors: list[str] = []
         warnings: list[str] = [EN16931_BASE_UNAVAILABLE_WARNING]
-        metadata: dict = {
-            "rulesets_run": [],
-            "scope": "iras-c5-only (EN16931 base, PINT-SG jurisdiction overlay, "
+        rulesets_run: list[str] = []
+        scope = (
+            "iras-c5-only (EN16931 base, PINT-SG jurisdiction overlay, "
             "SG BIS 3.0, and UBL 2.1 XSD structural validation not checked — see "
             "EN16931_BASE_UNAVAILABLE_WARNING, peppol-schematron-artifact.md, and "
-            "this module's docstring for why XSD is unavailable)",
-        }
+            "this module's docstring for why XSD is unavailable)"
+        )
 
         for ruleset in _ACTIVE_RULESETS:
             try:
@@ -263,15 +263,15 @@ class SGDocumentValidator(BaseDocumentValidator):
                 continue
 
             result = validator.validate(content)
-            metadata["rulesets_run"].append(ruleset)
+            rulesets_run.append(ruleset)
             for msg in result.errors:
                 errors.append(f"[{ruleset}] {msg.rule_id}: {msg.text} ({msg.location})")
             for msg in result.warnings:
                 warnings.append(f"[{ruleset}] {msg.rule_id}: {msg.text} ({msg.location})")
 
         return DocumentValidationResult(
-            valid=len(errors) == 0 and len(metadata["rulesets_run"]) > 0,
+            valid=len(errors) == 0 and len(rulesets_run) > 0,
             errors=errors,
             warnings=warnings,
-            metadata=metadata,
+            metadata={"rulesets_run": rulesets_run, "scope": scope},
         )
