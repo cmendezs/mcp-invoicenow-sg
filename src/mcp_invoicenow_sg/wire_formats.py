@@ -10,7 +10,12 @@ invoice 1.xml`:
     (PartyTaxScheme, TaxCategory, and AllowanceCharge/TaxCategory all use the
     same qualifier in the worked example).
   - SGParty.uen (BT-30/47, omitted from core's EN16931Party — see
-    models/invoice.py) is emitted as PartyLegalEntity/CompanyID when present.
+    models/invoice.py) is emitted as PartyLegalEntity/CompanyID when present,
+    via core's opt-in _get_party_legal_entity_company_id hook (v1.32.0,
+    CORE-6) — mirrors mcp_einvoicing_ae.wire_formats.AEUBLSerializer's
+    identical override for AEParty.trade_license_number. Previously a
+    package-local _build_party override duplicating core's element
+    traversal; see audit/2026-09-audit-core.md.
   - cbc:TaxCurrencyCode (BT-6, BR-53 position) is emitted right after
     DocumentCurrencyCode whenever it differs from currency_code (SG-TC-1) —
     SGD is the only tax currency this package's amounts are ever expressed
@@ -70,18 +75,10 @@ class SGUBLSerializer(EN16931UBLSerializer):
                 currency_el.addnext(tax_currency_el)
         return self._to_bytes(root)
 
-    def _build_party(self, parent: etree._Element, wrapper: str, party: EN16931Party) -> None:
-        super()._build_party(parent, wrapper, party)
-        if not (isinstance(party, SGParty) and party.uen):
-            return
-        wrapper_el = parent.find(_q(wrapper))
-        if wrapper_el is None:
-            return
-        party_el = wrapper_el.find(_q("Party"))
-        if party_el is None:
-            return
-        legal = party_el.find(_q("PartyLegalEntity"))
-        if legal is None:
-            return
-        company_id = etree.SubElement(legal, _q("CompanyID", _CBC))
-        company_id.text = party.uen
+    def _get_party_legal_entity_company_id(
+        self, party: EN16931Party
+    ) -> tuple[str, str | None] | None:
+        """SGParty.uen (BT-30/47), no schemeAgencyID."""
+        if isinstance(party, SGParty) and party.uen:
+            return (party.uen, None)
+        return None
