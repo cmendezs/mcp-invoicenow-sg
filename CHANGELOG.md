@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-09-09
+
+Core audit Step 3 item 4 (`audit/2026-09-audit-core.md`): CORE-6, now fully resolved across
+AE and SG.
+
+### Changed
+- **CORE-6** — Dropped the package-local `_build_party` override (duplicating core's
+  element traversal plus a `_q()`/`_CAC`/`_CBC` helper set, identical to AE's own
+  duplicate, fixed in `mcp-einvoicing-ae` v0.3.4) in favor of core's opt-in
+  `_get_party_legal_entity_company_id` hook (core v1.32.0) on `EN16931UBLSerializer`. Pure
+  internal refactor — output is byte-identical, confirmed by the existing
+  `test_wire_formats.py` assertion passing unchanged.
+- `mcp-einvoicing-core` floor pin bumped to `>=1.32.0,<2.0.0` (main dependency and the
+  `xslt2` optional-extra).
+
+### Fixed
+- `tests/test_sg_scaffold.py`'s `test_version_matches_pyproject` asserted a hardcoded
+  version literal instead of reading `pyproject.toml` dynamically — the same failure
+  pattern behind `mcp-einvoicing-ae`'s AE-SC-1 incident, except this instance would have
+  actively broken every future version bump as a hard test failure. Now reads
+  `pyproject.toml` directly, matching `tests/test_metadata.py`'s existing pattern.
+
 ## [0.3.1] - 2026-09-06
 
 ### Fixed

@@ -49,6 +49,15 @@ those entries under the new version heading.
 
 ## Release history
 
+### v0.3.2 - 2026-09-09
+
+Core audit Step 3 item 4 (CORE-6, now fully resolved across AE and SG): dropped the
+package-local `_build_party` override in favor of core's opt-in
+`_get_party_legal_entity_company_id` hook (core v1.32.0). Pure internal refactor, output
+byte-identical. Also fixed a hardcoded version-literal test that would have broken every
+future version bump. `mcp-einvoicing-core` floor pin bumped to `>=1.32.0,<2.0.0`. Full
+changelog: [`CHANGELOG.md`](CHANGELOG.md).
+
 ### v0.3.1 - 2026-09-06
 
 CI-only fix, no behavior change: resolved `mypy` type errors that were live CI failures (this
