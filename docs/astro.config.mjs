@@ -8,7 +8,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "mcp-invoicenow-sg",
-      description: "MCP server for Singapore electronic invoicing (InvoiceNow)",
+      description: "MCP server for Singapore electronic invoicing (InvoiceNow), vendor-neutral Peppol transport",
       customCss: ["./src/styles/docs-theme.css"],
       social: [
         { icon: "github", label: "GitHub", href: "https://github.com/cmendezs/mcp-invoicenow-sg" },
@@ -24,7 +24,7 @@ export default defineConfig({
       plugins: [
         starlightLlmsTxt({
           projectName: "mcp-invoicenow-sg",
-          description: "MCP server for Singapore electronic invoicing (InvoiceNow)",
+          description: "MCP server for Singapore electronic invoicing (InvoiceNow), vendor-neutral Peppol transport",
           customSets: [
             {
               label: "Key links",

@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "mcp-invoicenow-sg"
 version = "0.3.2"
-description = "MCP server for Singapore electronic invoicing (InvoiceNow)"
+description = "MCP server for Singapore electronic invoicing (InvoiceNow), vendor-neutral Peppol transport"
 readme = "README.md"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Christophe Mendez" }]

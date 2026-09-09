@@ -1,6 +1,6 @@
 # mcp-invoicenow-sg
 
-> MCP server for Singapore electronic invoicing (InvoiceNow)
+> MCP server for Singapore electronic invoicing (InvoiceNow), vendor-neutral Peppol transport
 
 ## Docs
 
