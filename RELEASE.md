@@ -70,7 +70,7 @@ typed locals. Full changelog: [`CHANGELOG.md`](CHANGELOG.md).
 
 ### v0.3.0 - 2026-08-30
 
-Resolves all 8 findings from the first SG compliance audit (`audit/2026-08-audit-sg.md`):
+Resolves all 8 findings from the first SG compliance audit:
 mandatory `cbc:UUID` for GST categories requiring it (SG-SC-1, migrated onto core's
 `document_uuid` field, core >=1.26.0), mandatory seller/buyer UEN (SG-SH-1), corrected
 `validate_invoice_sg` instructions (SG-SC-2), a test-only proof that core's UBL 2.1
@@ -86,11 +86,10 @@ warnings). Core dependency floor bumped to `>=1.26.0,<2.0.0`. Full changelog:
 
 Removed the unlicensed bundled Peppol/PINT-SG Schematron overlay (`PINT-jurisdiction-aligned-
 rules.xslt` / `PINT-UBL-validation-preprocessed.xslt`) shipped in v0.1.0's wheel — no confirmed
-redistribution rights, same gap `context-library/decisions/peppol-schematron-artifact.md`
-identified for `mcp-einvoicing-be`/`mcp-ksef-pl`. `validate_invoice_sg` now runs IRAS's C5
+redistribution rights, the same gap identified for `mcp-einvoicing-be`/`mcp-ksef-pl`. `validate_invoice_sg` now runs IRAS's C5
 acceptance layer only; core's shared `en16931_base_schematron_validator()` is wired but not
-activated pending a sourced GST-category ↔ UNCL5305 crosswalk (`[CORE-EN16931-BASE-SG-
-CROSSWALK-1]` in `context-library/roadmap-2026.md`). Real, documented coverage loss: PINT-SG's
+activated pending a sourced GST-category ↔ UNCL5305 crosswalk (tracked as
+`[CORE-EN16931-BASE-SG-CROSSWALK-1]`). Real, documented coverage loss: PINT-SG's
 own jurisdiction rules (e.g. `invoice_uuid`/`BR-108-GST-SG`) are no longer checked — see
 `EN16931_BASE_UNAVAILABLE_WARNING` in every `validate_invoice_sg` result. Full changelog:
 [`CHANGELOG.md`](CHANGELOG.md).
@@ -101,8 +100,8 @@ PINT-SG v1.4.1 / SG Peppol BIS Billing 3.0 sent-invoice support (`SGInvoice`), U
 serialization, PINT-SG + IRAS C5 Schematron validation, and 4 MCP tools. Depends on
 `mcp-einvoicing-core>=1.24.0` for `TaxIdentifier.validate_sg_uen()`. Ordering-family models,
 the IRAS Access Point submission client, and SG BIS 3.0 Schematron compilation are out of
-scope for this release — see `specs/README.md` and `context-library/countries/sg.md` (in the
-root monorepo) for full detail, including two `specs/README.md` items closed out editorially
+scope for this release — see `specs/README.md` for full detail, including two
+`specs/README.md` items closed out editorially
 (`[DEFERRED]`, not resolved) as a deliberate release decision since neither is load-bearing
 for what this version ships. Full changelog: [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -113,5 +112,4 @@ for what this version ships. Full changelog: [`CHANGELOG.md`](CHANGELOG.md).
 - The MCP registry does **not** sync automatically with PyPI or GitHub — step 3 is required for every release.
 - The `server.json` description field must be **≤ 100 characters**.
 - PyPI rejects re-uploads of the same version — always bump before tagging.
-- Publishing without a passing audit gate is prohibited. `publish.yml` enforces this, and the
-  monorepo `/audit-gate` skill is the local equivalent.
+- Publishing without a passing audit gate is prohibited. `publish.yml` enforces this.

@@ -93,8 +93,7 @@ def test_sg_invoice_validates_against_ubl_2_1_xsd(sg_invoice: SGInvoice) -> None
     This does NOT wire XSD validation into validate_invoice_sg: the OASIS
     schema files needed carry no locally-confirmed redistribution grant, so
     they are not bundled into the shipped wheel — see
-    validators/schematron.py's module docstring and
-    context-library/decisions/specs-directory-convention.md.
+    validators/schematron.py's module docstring.
     """
     validator = XSDValidator(_UBL_INVOICE_XSD)
     xml = SGUBLSerializer().serialize(sg_invoice)

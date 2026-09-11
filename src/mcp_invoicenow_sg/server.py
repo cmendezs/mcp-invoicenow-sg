@@ -1,8 +1,8 @@
 """MCP server entry point for mcp-invoicenow-sg.
 
 Tools cover PINT-SG v1.4.1 and SG Peppol BIS Billing 3.0 sent invoices
-(TX2_Annex Annex B "Type 1A") only. See context-library/countries/sg.md for
-what remains open: UEN check-digit validation (no ACRA source supplied), SG
+(TX2_Annex Annex B "Type 1A") only. See the package's own compliance
+reference for what remains open: UEN check-digit validation (no ACRA source supplied), SG
 Peppol BIS 3.0 Schematron (no pre-compiled stylesheet available), the
 Ordering-message family (BaseUBLDocument now exists in core >=1.23.0 but no
 SG model subclasses it yet), and the IRAS Access Point submission client (no
@@ -20,7 +20,7 @@ def _sg_id_adapter(identifier: str) -> str:
     """Normalize a bare Singapore UEN to a Peppol participant ID.
 
     Scheme 0195 is the Singapore Nationwide E-Invoice Framework (IMDA) —
-    see context-library/countries/sg.md, "Peppol participant identifier
+    see the package's own compliance reference, "Peppol participant identifier
     scheme". Already scheme-qualified identifiers (containing ':') pass
     through unchanged.
     """

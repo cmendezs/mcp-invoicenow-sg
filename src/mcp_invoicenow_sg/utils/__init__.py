@@ -1,4 +1,4 @@
 """Utils for mcp-invoicenow-sg.
 
-Empty at scaffold stage. See context-library/countries/sg.md for the blocking [NEED:] items.
+Empty at scaffold stage. See the package's own compliance reference for the blocking [NEED:] items.
 """

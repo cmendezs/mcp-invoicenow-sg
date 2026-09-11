@@ -13,7 +13,7 @@ Exit codes:
 Phase D note (2026-08-27)
 -------------------------
 ``_IS_EN16931_FAMILY`` / ``_PRIMARY_INVOICE_CLASS`` are now set (SGInvoice,
-resolved per context-library/countries/sg.md's "Invoice-tree pathway"), so
+resolved per the package's own compliance reference, "Invoice-tree pathway"), so
 CHECK 1 (core interface coverage) runs unconditionally alongside CHECK 0, 4,
 and 5. ``_INTENTIONAL_OVERRIDES`` was populated 2026-08-30 (SG-AG-1); any
 remaining CHECK 1 ``[MISSING]`` findings are genuinely new core symbols this
@@ -56,7 +56,7 @@ _SOURCES = _ROOT / "specs" / "README.md"
 # CHECK 1 configuration — country-specific constants
 # ---------------------------------------------------------------------------
 
-# Pathway resolved 2026-08-27 per context-library/countries/sg.md,
+# Pathway resolved 2026-08-27 per the package's own compliance reference,
 # "Invoice-tree pathway": both PINT-SG and SG Peppol BIS Billing 3.0 are
 # confirmed CIUS/extensions of EN 16931-1:2017.
 _IS_EN16931_FAMILY: bool | None = True
@@ -73,7 +73,7 @@ _MODULES: list[str] = [
     f"{_MODULE}.tools.invoice_tools",
 ]
 
-# Populated 2026-08-30 (SG-AG-1, audit/2026-08-audit-sg.md) — mirrors
+# Populated 2026-08-30 (SG-AG-1) — mirrors
 # mcp-einvoicing-be's audit/audit_vs_core.py structure. Symbols genuinely
 # unused by this package (stdlib/pydantic re-exports SG imports from source
 # directly, and core features SG has no current use for — Access Point
@@ -106,7 +106,7 @@ _INTENTIONAL_OVERRIDES: dict[str, set[str]] = {
         # OVERRIDE-REASON: SG-SC-1 resolved via EN16931Invoice pathway; SGInvoice/SGParty extend EN16931Invoice/EN16931Party, not InvoiceDocument/InvoiceParty (the non-EN16931 pathway)
         "InvoiceDocument",
         "InvoiceParty",
-        # OVERRIDE-REASON: no submission tool implemented — the IRAS Access Point client is a known, documented gap (SG-LC-1, not core-blocked; see context-library/countries/sg.md)
+        # OVERRIDE-REASON: no submission tool implemented — the IRAS Access Point client is a known, documented gap (SG-LC-1, not core-blocked)
         "SubmitResult",
         # OVERRIDE-REASON: SGParty.uen validates via TaxIdentifier.validate_sg_uen() directly, which returns a plain (bool, str) tuple, not core's TaxIdValidationResult wrapper
         "TaxIdValidationResult",
@@ -255,7 +255,7 @@ _INTENTIONAL_OVERRIDES: dict[str, set[str]] = {
         "safe_parser",
         # OVERRIDE-REASON: no JSON-Schema-based format for SG — PINT-SG / SG Peppol BIS Billing 3.0 are XML/UBL only
         "BaseJSONValidator",
-        # OVERRIDE-REASON: SG-SC-3 — UBL 2.1 XSD structural validation is test-only (tests/fixtures/ubl-2.1/, tests/test_wire_formats.py), not wired into production validate_invoice_sg: the OASIS UBL 2.1 schema files carry no locally-confirmed redistribution grant, so they are not bundled into the shipped wheel — see validators/schematron.py's module docstring and context-library/decisions/specs-directory-convention.md
+        # OVERRIDE-REASON: SG-SC-3 — UBL 2.1 XSD structural validation is test-only (tests/fixtures/ubl-2.1/, tests/test_wire_formats.py), not wired into production validate_invoice_sg: the OASIS UBL 2.1 schema files carry no locally-confirmed redistribution grant, so they are not bundled into the shipped wheel — see validators/schematron.py's module docstring
         "BaseXSDValidator",
         "XSDValidator",
         # OVERRIDE-REASON: load_schematron_validator (imported and used) resolves to SaxonSchematronValidator/SchematronValidator internally via its auto-dispatch factory; SG never constructs either by name directly
@@ -312,7 +312,7 @@ def run_check_0() -> CheckResult:
                 "_IS_EN16931_FAMILY",
                 (
                     "Invoice-tree pathway is unresolved. Set it from the conformance "
-                    "statement recorded in context-library/countries/sg.md, never from memory. "
+                    "statement recorded in the package's own compliance reference, never from memory. "
                     "No model code may be written while this is None."
                 ),
             )

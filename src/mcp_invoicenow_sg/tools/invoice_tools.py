@@ -3,7 +3,7 @@
 Scope: PINT-SG v1.4.1 and SG Peppol BIS Billing 3.0 sent invoices (TX2_Annex
 Annex B "Type 1A"). No submission/transport tool is provided here — the
 IRAS Access Point submission mechanics (TX3) are not yet wired to a core
-client; see context-library/countries/sg.md, "Known gaps and open items".
+client; see the package's own compliance reference, "Known gaps and open items".
 """
 
 from __future__ import annotations
@@ -90,7 +90,7 @@ def register_invoice_tools(mcp: FastMCP) -> None:
         validators/schematron.py's module docstring for why (SGInvoice's GST
         category codes have no sourced crosswalk to the UNCL5305 code list
         the base ruleset requires; tracked as
-        [CORE-EN16931-BASE-SG-CROSSWALK-1] in context-library/roadmap-2026.md).
+        [CORE-EN16931-BASE-SG-CROSSWALK-1]).
 
         Requires the optional `xslt2` extra (`pip install
         mcp-invoicenow-sg[xslt2]`) — the bundled stylesheet needs XSLT 2.0.
@@ -139,8 +139,8 @@ def register_invoice_tools(mcp: FastMCP) -> None:
 
         PINT_SG is the recommended profile for new senders — SG Peppol BIS
         Billing 3.0 (BIS3) predates the PINT programme and is positioned as
-        legacy (context-library/countries/sg.md, "Supported wire formats and
-        profile URNs" — user-supplied guidance, not independently verified
+        legacy (per the package's own compliance reference, "Supported wire
+        formats and profile URNs" — user-supplied guidance, not independently verified
         against an IRAS/IMDA notice). Not enforced as a hard default here;
         callers choose explicitly.
         """

@@ -34,8 +34,7 @@ own jurisdiction overlay itself, from `specs/pint-sg/common/schematron/
 PINT-jurisdiction-aligned-rules.sch` (and the `PINT-UBL-validation-
 preprocessed.sch` base layer alongside it). Neither file carries a
 redistribution grant — same absence of license found for
-`mcp-einvoicing-be`/`mcp-ksef-pl`'s Peppol BIS 3.0 overlay in
-context-library/decisions/peppol-schematron-artifact.md. Do not reintroduce
+`mcp-einvoicing-be`/`mcp-ksef-pl`'s Peppol BIS 3.0 overlay. Do not reintroduce
 either file or a hand-rolled equivalent.
 
 SG Peppol BIS Billing 3.0's Schematron (specs/peppol-bis3/resources/
@@ -75,13 +74,11 @@ surfaced two distinct issues, one fixable and one not:
    UNCL5305 is present in anything supplied. Inventing one would violate the
    project's hallucination guardrail (tax-category mappings must come from a
    supplied spec, not memory) and would substantively reimplement the
-   removed, unlicensed PINT-jurisdiction-aligned-rules.sch overlay by hand —
-   exactly what context-library/decisions/peppol-schematron-artifact.md says
-   not to do.
+   removed, unlicensed PINT-jurisdiction-aligned-rules.sch overlay by hand.
 
 Per user decision (2026-08-28): en16931_base stays unavailable rather than
-running with a partial/misleading result. Tracked in
-context-library/roadmap-2026.md as [CORE-EN16931-BASE-SG-CROSSWALK-1] — the
+running with a partial/misleading result. Tracked as
+[CORE-EN16931-BASE-SG-CROSSWALK-1] — the
 specific spec needed to unblock it is an authoritative IRAS/PINT-SG source
 stating the GST-category ↔ UNCL5305 correspondence.
 
@@ -89,22 +86,21 @@ Callers must install mcp-invoicenow-sg[xslt2] for validate_invoice_sg to
 produce a real result; get_sg_validator() surfaces a missing saxonche install
 as SgStylesheetUnsupportedError rather than letting ImportError propagate.
 
-UBL 2.1 XSD structural validation (SG-SC-3, audit/2026-08-audit-sg.md) is NOT
+UBL 2.1 XSD structural validation (SG-SC-3) is NOT
 wired into validate_invoice_sg, despite core providing a working XSDValidator
 (core >=1.20.0): the OASIS UBL 2.1 schema files this would need to bundle
 carry only a bare "Copyright (c) OASIS Open 2013. All Rights Reserved."
 notice, no explicit redistribution grant, in any locally-supplied copy — the
 same absence-of-grant class of finding that made mcp-einvoicing-ae remove its
 bundled peppol-tdd-1.0.0.xsd in v0.2.0 (see that package's
-validators/schematron.py and context-library/decisions/
-specs-directory-convention.md, "Bundling into the shipped wheel"). Per user
+validators/schematron.py). Per user
 decision 2026-08-30, this package follows the same precedent: no OASIS
 content ships in the wheel. The fix to core's own `_build_party` element
 ordering (core v1.26.0 — see mcp-einvoicing-core's changelog) is verified
 against a real UBL 2.1 schema in a test-only fixture
 (tests/fixtures/ubl-2.1/, mirroring mcp-einvoicing-core's own equivalent),
 not a production capability. Tracked as [NEED: OASIS UBL 2.1 redistribution
-grant] in context-library/roadmap-2026.md.
+grant].
 """
 
 from __future__ import annotations
@@ -160,13 +156,13 @@ _validators: dict[str, BaseStructuredValidator] = {}
 #: Included in every validate_invoice_sg result: explains why the CEN
 #: EN16931 base Schematron is not checked, and what would unblock it. See
 #: "Why en16931_base is not run" in the module docstring and
-#: [CORE-EN16931-BASE-SG-CROSSWALK-1] in context-library/roadmap-2026.md.
+#: [CORE-EN16931-BASE-SG-CROSSWALK-1].
 EN16931_BASE_UNAVAILABLE_WARNING = (
     "EN16931-BASE-UNAVAILABLE: SGInvoice uses IRAS's own GST category codes "
     "(SR/ZR/ES33/DS/OS/NG/...), not the UNCL5305 code list the CEN EN16931 "
     "base Schematron's BR-CL-17 (and the per-category rules) require. No "
     "sourced crosswalk between the two code lists is available — see "
-    "[CORE-EN16931-BASE-SG-CROSSWALK-1] in context-library/roadmap-2026.md. "
+    "[CORE-EN16931-BASE-SG-CROSSWALK-1]. "
     "iras_c5 is the only ruleset currently checked."
 )
 

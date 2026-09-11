@@ -62,8 +62,7 @@ def test_document_uuid_requirement_now_enforced_at_model_layer(sg_invoice_data: 
 
     BR-108-GST-SG (document_uuid requirement) previously lived only in the
     bundled PINT-jurisdiction-aligned-rules.sch, removed 2026-08-28 for
-    lacking a redistribution grant (context-library/decisions/
-    peppol-schematron-artifact.md). As of SG-SC-1, SGInvoice itself enforces
+    lacking a redistribution grant. As of SG-SC-1, SGInvoice itself enforces
     it (_require_document_uuid_for_gst_sg, see test_models.py) — a document
     missing document_uuid can no longer even be constructed, so it never
     reaches validate_invoice_sg to test the (still absent) Schematron-layer

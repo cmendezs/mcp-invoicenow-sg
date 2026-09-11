@@ -1,7 +1,7 @@
 """UBL 2.1 serializer for SGInvoice — PINT-SG / SG Peppol BIS Billing 3.0.
 
 Reuses mcp_einvoicing_core.wire_formats.EN16931UBLSerializer wholesale (both
-SG profiles are UBL 2.1, per context-library/countries/sg.md) and overrides
+SG profiles are UBL 2.1, per the package's own compliance reference) and overrides
 three SG-specific behaviors confirmed against
 `specs/pint-sg/trn-invoice/example/PINT-SG INV example 02 - full valid
 invoice 1.xml`:
@@ -15,7 +15,7 @@ invoice 1.xml`:
     CORE-6) — mirrors mcp_einvoicing_ae.wire_formats.AEUBLSerializer's
     identical override for AEParty.trade_license_number. Previously a
     package-local _build_party override duplicating core's element
-    traversal; see audit/2026-09-audit-core.md.
+    traversal.
   - cbc:TaxCurrencyCode (BT-6, BR-53 position) is emitted right after
     DocumentCurrencyCode whenever it differs from currency_code (SG-TC-1) —
     SGD is the only tax currency this package's amounts are ever expressed

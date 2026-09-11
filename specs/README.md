@@ -3,16 +3,13 @@
 This directory holds the normative source material for Singapore's InvoiceNow / PINT-SG,
 Peppol BIS Billing 3.0, Peppol Ordering, and IRAS GST standards — official PDFs, XSD/XSLT
 schemas, Schematron rule files, codelists, and other primary documents. Values derived from
-these documents belong in
-[`context-library/countries/sg.md`](../../context-library/countries/sg.md), not in code and
+these documents belong in this package's own compliance reference, not in code and
 not duplicated as a new file in this directory.
 
 Normative sources are never web-fetched for this package (per project convention). All files
 below were supplied by the user as local downloads on 2026-08-26.
 
-**Commit policy for this directory** follows
-[`context-library/decisions/specs-directory-convention.md`](../../context-library/decisions/specs-directory-convention.md):
-normative material — legal/regulatory texts, XSD/Schematron/XSLT/WSDL/OpenAPI, and official
+**Commit policy for this directory**: normative material — legal/regulatory texts, XSD/Schematron/XSLT/WSDL/OpenAPI, and official
 technical PDFs — is committed directly, with no blanket size- or format-based exclusion (DE and
 FR commit 59MB/117MB of this material with no exclusion at all; SG's ~15MB is well within that
 range). Exclusions are narrow, reason-specific, and named — never a filter on a whole file type,
@@ -59,7 +56,7 @@ rule silently untracked 14 of the files this document lists as "committed as nor
 the e-Tax Guide, all four TX1-TX3 PDFs, the FAQ and recommended-features PDFs, the four
 `pint-sg/common/docs/` PDFs, and the two OpenPeppol bundle zips under `pint-sg/common/` — even
 though this file and the commit that introduced it both said "nothing has been excluded." The
-blanket rule violated `context-library/decisions/specs-directory-convention.md` (no blanket
+blanket rule violated this package's own specs commit policy (no blanket
 file-type `.gitignore` exclusion) and was never a deliberate decision recorded anywhere; it was
 scaffold boilerplate nobody revisited once real specs arrived. Removed 2026-08-27; the 14 files
 are now actually tracked, making this file's "Excluded sources" claim true rather than aspirational.
@@ -178,9 +175,6 @@ GST rate effective date and UEN format were resolved later (2026-08-27/28, see t
 table above) once the user supplied the relevant information; the UEN check-digit algorithm was
 resolved 2026-08-28 via a third-party open-source reference implementation (see that row).
 
-See [`context-library/countries/sg.md`](../../context-library/countries/sg.md) for the full
-detail and citations.
-
 ## Non-file sources
 
 - **ACRA UEN format** (2026-08-27): the three UEN shapes (businesses/local companies/other
@@ -243,7 +237,7 @@ otherwise.
 
 ## Excluded sources
 
-Per `context-library/decisions/specs-directory-convention.md`, this section names anything
+Per this package's specs commit policy, this section names anything
 deliberately left out of this directory and why — required even when the answer is "nothing,"
 so a later reader can tell the question was asked rather than skipped.
 

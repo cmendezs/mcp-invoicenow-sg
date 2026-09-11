@@ -32,16 +32,14 @@ shared validation engine, EN 16931 abstractions, and Peppol network utilities.
   jurisdiction Schematron rules (e.g. the `invoice_uuid` requirement) are **not** checked — see
   "Not yet supported" below.
 
-**Not yet supported** (see [`specs/README.md`](specs/README.md) and this monorepo's
-`context-library/countries/sg.md` for full detail):
+**Not yet supported** (see [`specs/README.md`](specs/README.md) for full detail):
 - **CEN EN16931 base and PINT-SG jurisdiction Schematron validation.** v0.1.0 bundled a
   self-compiled derivative of OpenPeppol's PINT-SG jurisdiction Schematron with no confirmed
   redistribution rights; it was removed in v0.2.0 (2026-08-28). The shared, properly-licensed
   core CEN EN16931 base validator is wired but not yet activated for SG — `SGInvoice`'s IRAS
   GST category codes have no sourced crosswalk to the UNCL5305 code list that validator requires.
-  See `EN16931_BASE_UNAVAILABLE_WARNING` in every `validate_invoice_sg` result and this
-  monorepo's `context-library/roadmap-2026.md` (`[CORE-EN16931-BASE-SG-CROSSWALK-1]`) for what
-  would unblock it.
+  See `EN16931_BASE_UNAVAILABLE_WARNING` in every `validate_invoice_sg` result
+  (tracked as `[CORE-EN16931-BASE-SG-CROSSWALK-1]`) for what would unblock it.
 - The Peppol Ordering message family (`Order`, `OrderResponse`, etc.) and IMDA's SG-specific
   Order Balance.
 - **UBL 2.1 XSD structural validation.** Proven correct against a real UBL 2.1 schema in this

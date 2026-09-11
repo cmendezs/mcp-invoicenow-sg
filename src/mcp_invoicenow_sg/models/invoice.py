@@ -1,13 +1,13 @@
 """Singapore e-invoicing Pydantic models — PINT-SG v1.4.1 / SG Peppol BIS Billing 3.0.
 
 Both profiles SG supports for sending invoices are confirmed CIUS/extensions of
-EN 16931-1:2017 (see context-library/countries/sg.md, "Invoice-tree pathway" —
-resolved 2026-08-26). SGInvoice therefore extends EN16931Invoice rather than
-InvoiceDocument, per the monorepo's canonical invoice tree rule.
+EN 16931-1:2017 (see the package's own compliance reference, "Invoice-tree
+pathway" — resolved 2026-08-26). SGInvoice therefore extends EN16931Invoice
+rather than InvoiceDocument, per the canonical invoice tree rule.
 
 Every profile URN, GST category code, and party-identifier note below is
-copied verbatim from context-library/countries/sg.md — do not derive a new
-value from memory. Two items are deliberately left unmodeled here because the
+copied verbatim from the package's own compliance reference — do not derive
+a new value from memory. Two items are deliberately left unmodeled here because the
 source documents do not yet supply enough to model them safely:
 
   - UEN check-digit validation: no ACRA source has been supplied (sg.md,
@@ -42,8 +42,8 @@ from mcp_einvoicing_core.profile_registry import profile_registry
 from pydantic import Field, field_validator, model_validator
 
 # ---------------------------------------------------------------------------
-# Profile URNs — context-library/countries/sg.md, "Supported wire formats and
-# profile URNs". Copied verbatim; do not reconstruct from memory.
+# Profile URNs — see the package's own compliance reference, "Supported wire
+# formats and profile URNs". Copied verbatim; do not reconstruct from memory.
 # ---------------------------------------------------------------------------
 
 SG_PINT_CUSTOMIZATION_ID: str = "urn:peppol:pint:billing-1@sg-1"
@@ -91,7 +91,7 @@ _PROFILE_TO_BUSINESS_PROCESS: dict[str, str] = {
 
 # ---------------------------------------------------------------------------
 # GST category codes — IRAS e-Tax Guide Annex E, supply (output tax) side only.
-# context-library/countries/sg.md, "Exemption and special-scheme codes".
+# See the package's own compliance reference, "Exemption and special-scheme codes".
 # The purchase-side codes (TX, IM, ME, ...) are out of scope: SGInvoice models
 # sent invoices, which only ever declare a supply-side code.
 # ---------------------------------------------------------------------------
@@ -142,7 +142,7 @@ SG_GST_CATEGORY_CODES: dict[str, tuple[float | None, str]] = {
 }
 
 # BR-108-GST-SG (PINT-jurisdiction-aligned-rules.sch, confirmed 2026-08-27 —
-# see context-library/countries/sg.md, "Invoice-tree pathway"): cbc:UUID
+# see the package's own compliance reference, "Invoice-tree pathway"): cbc:UUID
 # (BT-SG-003) is mandatory whenever any tax breakdown, line, or
 # allowance/charge declares one of these GST categories.
 SG_BR108_GST_SG_CATEGORIES: frozenset[str] = frozenset(
@@ -160,8 +160,8 @@ class SGParty(EN16931Party):
     """Singapore trading party — adds UEN (BT-30/47).
 
     uen: Unique Entity Number, PartyLegalEntity/CompanyID in the wire format.
-        [NEED: format/checksum — ACRA source not yet supplied, see
-        context-library/countries/sg.md, "Party-identifier formats". No
+        [NEED: format/checksum — ACRA source not yet supplied, see the
+        package's own compliance reference, "Party-identifier formats". No
         validator is attached; do not add one until a source exists.]
 
     GST registration number (also BT-31/48) is carried in the inherited
@@ -279,8 +279,9 @@ class SGInvoice(EN16931Invoice):
         "SGD",
         description=(
             "ISO 4217 invoice currency code (BT-5). No SGD-specific mandate was found in the "
-            "supplied PINT-SG rule set (context-library/countries/sg.md, 'Currency and GST "
-            "rates' — resolved 2026-08-27); widened from a fixed 'SGD' Literal to any "
+            "supplied PINT-SG rule set (see the package's own compliance reference, "
+            "'Currency and GST rates' — resolved 2026-08-27); widened from a fixed 'SGD' "
+            "Literal to any "
             "3-letter code (mirrors core's EN16931Invoice.currency_code type), defaulting to "
             "SGD since every supplied example invoice uses it. Only format-shape validated "
             "here (_validate_currency_shape) — full ISO 4217 membership checking is available "
@@ -368,7 +369,7 @@ class SGInvoice(EN16931Invoice):
 
 # ---------------------------------------------------------------------------
 # Profile registration — mcp_einvoicing_core.profile_registry (v1.22.0+).
-# Confirmed not a core gap: context-library/countries/sg.md, Known gaps table,
+# Confirmed not a core gap: see the package's own compliance reference, Known gaps table,
 # "PINT-SG CustomizationID/ProfileID constants absent from core — Resolved
 # 2026-08-27". ProfileID (BT-23) values are shared Peppol process
 # identifiers, not per-country, so only CustomizationID/GuidelineID (BT-24)

@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.2] - 2026-09-09
 
-Core audit Step 3 item 4 (`audit/2026-09-audit-core.md`): CORE-6, now fully resolved across
+Core audit Step 3 item 4: CORE-6, now fully resolved across
 AE and SG.
 
 ### Changed
@@ -49,8 +49,7 @@ AE and SG.
 
 ## [0.3.0] - 2026-08-30
 
-Resolves all 8 findings from the first SG compliance audit
-(`audit/2026-08-audit-sg.md`).
+Resolves all 8 findings from the first SG compliance audit.
 
 ### Added
 - `SGInvoice` model validator (`_require_document_uuid_for_gst_sg`) requiring
@@ -94,7 +93,7 @@ Resolves all 8 findings from the first SG compliance audit
   UBL 2.1 schema files carry no locally-confirmed redistribution grant,
   following the same precedent `mcp-einvoicing-ae` set in v0.2.0 when it
   removed a bundled `peppol-tdd-1.0.0.xsd`. Tracked as `[NEED: OASIS UBL 2.1
-  redistribution grant]` in `context-library/roadmap-2026.md`.
+  redistribution grant]`.
 
 ## [0.2.0] - 2026-08-28
 
@@ -104,8 +103,7 @@ Resolves all 8 findings from the first SG compliance audit
   preprocessed.xslt` (compiled from OpenPeppol's `PINT-jurisdiction-aligned-
   rules.sch` / `PINT-UBL-validation-preprocessed.sch`) were bundled and
   shipped in the v0.1.0 wheel with no confirmed redistribution rights — the
-  same absence of license `context-library/decisions/peppol-schematron-
-  artifact.md` found for `mcp-einvoicing-be`/`mcp-ksef-pl`'s Peppol BIS 3.0
+  same absence of license found for `mcp-einvoicing-be`/`mcp-ksef-pl`'s Peppol BIS 3.0
   overlay. Both files are removed; validate_invoice_sg no longer compiles or
   ships any OpenPeppol-derived Schematron content.
 
@@ -116,8 +114,7 @@ Resolves all 8 findings from the first SG compliance audit
   activated: `SGInvoice`'s IRAS GST category codes (`SR`/`ZR`/`ES33`/...)
   have no sourced crosswalk to the UNCL5305 code list the base ruleset's
   `BR-CL-17` requires. See `EN16931_BASE_UNAVAILABLE_WARNING` in every
-  result and `[CORE-EN16931-BASE-SG-CROSSWALK-1]` in
-  `context-library/roadmap-2026.md` for what would unblock it.
+  result (tracked as `[CORE-EN16931-BASE-SG-CROSSWALK-1]`) for what would unblock it.
 - **Known coverage loss**: PINT-SG's own jurisdiction rules (e.g. the
   `invoice_uuid`/`BR-108-GST-SG` requirement) are no longer checked by
   `validate_invoice_sg`. This is a real, deliberate reduction in validation
@@ -147,5 +144,5 @@ First release. PINT-SG v1.4.1 / SG Peppol BIS Billing 3.0 sent-invoice support.
 - SG Peppol BIS Billing 3.0 Schematron — ships only raw ISO Schematron source,
   no pre-compiled XSLT.
 
-See `specs/README.md` and the monorepo's `context-library/countries/sg.md` for
+See `specs/README.md` for
 full detail and citations.
