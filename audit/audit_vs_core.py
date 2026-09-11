@@ -1,8 +1,8 @@
 """Pre-publish audit: verify mcp-invoicenow-sg coherence against mcp-einvoicing-core.
 
-Run standalone (from the workspace root):
-    uv run python mcp-invoicenow-sg/audit/audit_vs_core.py
-    uv run python mcp-invoicenow-sg/audit/audit_vs_core.py --output mcp-invoicenow-sg/audit/report.json
+Run standalone (from this repo's own root):
+    uv run python audit/audit_vs_core.py
+    uv run python audit/audit_vs_core.py --output audit/report.json
     uv run python mcp-invoicenow-sg/audit/audit_vs_core.py --fail-on blocking
 
 Exit codes:
@@ -43,6 +43,7 @@ from mcp_einvoicing_core.audit import (
     parse_audit_args,
     render_summary_table,
     run_check_core_coverage,
+    run_check_no_internal_references,
     run_check_version_compatibility,
 )
 
@@ -425,6 +426,10 @@ def run_audit() -> AuditReport:
         )
     )
     report.checks.append(run_check_5())
+
+    report.checks.append(
+        run_check_no_internal_references(repo_root=_ROOT)
+    )
 
     return report
 
