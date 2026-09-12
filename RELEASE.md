@@ -49,6 +49,10 @@ those entries under the new version heading.
 
 ## Release history
 
+### v0.3.3 - 2026-09-12
+
+Lower-bound pin on `mcp-einvoicing-core` raised to `>=1.34.1` (was `>=1.32.0`). This package's own CI now runs `CHECK_PUBLIC_HYGIENE`, the pre-publish audit check that blocks accidental citations of the private orchestration repo. Full changelog: [`CHANGELOG.md`](CHANGELOG.md).
+
 ### v0.3.2 - 2026-09-09
 
 Core audit Step 3 item 4 (CORE-6, now fully resolved across AE and SG): dropped the
