@@ -49,6 +49,10 @@ those entries under the new version heading.
 
 ## Release history
 
+### v0.3.4 - 2026-11-22
+
+Moved the IRAS GST category table to `standards/gst_categories.py` (no behavior change; still importable from `models`), typed `_IS_EN16931_FAMILY` as `bool` in the audit script, added the README Architecture section, and regenerated `docs/TOOLS.md`.
+
 ### v0.3.3 - 2026-09-12
 
 Lower-bound pin on `mcp-einvoicing-core` raised to `>=1.34.1` (was `>=1.32.0`). This package's own CI now runs `CHECK_PUBLIC_HYGIENE`, the pre-publish audit check that blocks accidental citations of the private orchestration repo. Full changelog: [`CHANGELOG.md`](CHANGELOG.md).
