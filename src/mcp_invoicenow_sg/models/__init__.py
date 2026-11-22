@@ -3,7 +3,6 @@
 from mcp_invoicenow_sg.models.invoice import (
     SG_BIS3_CUSTOMIZATION_ID,
     SG_BIS3_PROFILE_ID,
-    SG_GST_CATEGORY_CODES,
     SG_PINT_CUSTOMIZATION_ID,
     SG_PINT_PROFILE_ID,
     SGAllowanceCharge,
@@ -15,6 +14,7 @@ from mcp_invoicenow_sg.models.invoice import (
     SGParty,
     SGTax,
 )
+from mcp_invoicenow_sg.standards.gst_categories import SG_GST_CATEGORY_CODES
 
 __all__ = [
     "SG_BIS3_CUSTOMIZATION_ID",

@@ -60,7 +60,7 @@ _SOURCES = _ROOT / "specs" / "README.md"
 # Pathway resolved 2026-08-27 per the package's own compliance reference,
 # "Invoice-tree pathway": both PINT-SG and SG Peppol BIS Billing 3.0 are
 # confirmed CIUS/extensions of EN 16931-1:2017.
-_IS_EN16931_FAMILY: bool | None = True
+_IS_EN16931_FAMILY: bool = True
 _PRIMARY_INVOICE_CLASS: tuple[str, str] | None = (
     f"{_MODULE}.models.invoice",
     "SGInvoice",
@@ -305,20 +305,7 @@ def run_check_0() -> CheckResult:
     """CHECK 0 — scaffold gates that block implementation and publication."""
     result = CheckResult(check_id="CHECK_0", name="Scaffold gates")
 
-    if _IS_EN16931_FAMILY is None:
-        result.findings.append(
-            _finding(
-                "[NEED]",
-                SEVERITY_BLOCKING,
-                "_IS_EN16931_FAMILY",
-                (
-                    "Invoice-tree pathway is unresolved. Set it from the conformance "
-                    "statement recorded in the package's own compliance reference, never from memory. "
-                    "No model code may be written while this is None."
-                ),
-            )
-        )
-    elif _PRIMARY_INVOICE_CLASS is None:
+    if _PRIMARY_INVOICE_CLASS is None:
         result.findings.append(
             _finding(
                 "[MISSING]",

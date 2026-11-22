@@ -18,11 +18,11 @@ from pydantic import Field, ValidationError
 from mcp_invoicenow_sg.models.invoice import (
     SG_BIS3_CUSTOMIZATION_ID,
     SG_BIS3_PROFILE_ID,
-    SG_GST_CATEGORY_CODES,
     SG_PINT_CUSTOMIZATION_ID,
     SG_PINT_PROFILE_ID,
     SGInvoice,
 )
+from mcp_invoicenow_sg.standards.gst_categories import SG_GST_CATEGORY_CODES
 from mcp_invoicenow_sg.validators.schematron import (
     SGDocumentValidator,
     SgStylesheetUnsupportedError,

@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-11-22
+
+### Changed
+- The IRAS GST category table (`SG_GST_CATEGORY_CODES`) moved from `models/invoice.py` to `standards/gst_categories.py`. No behavior change: `from mcp_invoicenow_sg.models import SG_GST_CATEGORY_CODES` still works and `get_gst_category_codes_sg` returns the same data. It stays a Python table because the only SG genericode list available is OpenPeppol content with no confirmed redistribution grant and lacks the rate and description columns.
+- Audit script: `_IS_EN16931_FAMILY` is typed `bool`.
+
+### Added
+- README "Architecture" section.
+
 ## [0.3.3] - 2026-09-12
 
 ### Changed

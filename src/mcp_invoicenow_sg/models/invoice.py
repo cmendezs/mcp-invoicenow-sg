@@ -112,35 +112,6 @@ SGGSTCategoryCode = Literal[
     "NG",
 ]
 
-# {code: (rate_percent | None, description)} — None means "NA" (no fixed rate).
-# Source: same Annex E table as SGGSTCategoryCode above.
-SG_GST_CATEGORY_CODES: dict[str, tuple[float | None, str]] = {
-    "SR": (9.0, "Standard-rated supply of goods or services"),
-    "SRCA-S": (None, "Customer accounting supply made by supplier"),
-    "SRCA-C": (9.0, "Customer accounting supply accountable by the customer on supplier's behalf"),
-    "SRLVG": (9.0, "Own supply of Low-Value Goods (LVG)"),
-    "SRRC": (
-        9.0,
-        "Imported services and LVG accountable by the GST-registered customer under reverse charge",
-    ),
-    "SROVR-RS": (
-        9.0,
-        "Supply of remote services accountable by the electronic marketplace on behalf of "
-        "third-party suppliers",
-    ),
-    "SROVR-LVG": (
-        9.0,
-        "Supply of LVG accountable by the redeliverer or electronic marketplace on behalf of "
-        "third-party suppliers",
-    ),
-    "DS": (9.0, "Deemed supplies"),
-    "ZR": (0.0, "Zero-rated supplies"),
-    "ES33": (None, "Regulation 33 Exempt Supplies"),
-    "ESN33": (None, "Non-Regulation 33 Exempt Supplies"),
-    "OS": (None, "Supplies outside the scope of the GST Act"),
-    "NG": (None, "Supplies made by a non-GST-registered business"),
-}
-
 # BR-108-GST-SG (PINT-jurisdiction-aligned-rules.sch, confirmed 2026-08-27 —
 # see the package's own compliance reference, "Invoice-tree pathway"): cbc:UUID
 # (BT-SG-003) is mandatory whenever any tax breakdown, line, or

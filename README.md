@@ -188,6 +188,26 @@ The tool reference in [`docs/TOOLS.md`](docs/TOOLS.md) is generated from the run
 uv run python scripts/gen_tool_reference.py
 ```
 
+## Architecture
+
+```
+mcp-einvoicing-core
+├── EN16931Invoice / Party / LineItem / Tax   ← SGInvoice, SGParty, SGLineItem, SGTax (models/invoice.py)
+├── EN16931UBLSerializer                      ← SGUBLSerializer (wire_formats.py): PINT-SG additions
+├── BaseDocumentValidator                     ← SGDocumentValidator (validators/schematron.py)
+├── BaseStructuredValidator                   ← IRAS C5 acceptance layer; CEN EN 16931 base (wired, not run)
+├── profile_registry                          ← PINT_SG and BIS3 profile URNs (registered at import)
+└── Peppol plugin (register_peppol_tools)     ← participant lookup, AS4 send, directory, eDEC codelists
+
+Package-local
+└── SG_GST_CATEGORY_CODES                     ← IRAS GST category table (standards/gst_categories.py)
+```
+
+`SGInvoice` subclasses core's `EN16931Invoice`, so Singapore invoices reuse core's EN 16931 model
+and UBL serializer, and this package adds only the Singapore parts: the UEN party identifier, the
+GST category codes, the PINT-SG additions on the wire (`SGUBLSerializer`), and the IRAS C5
+acceptance rules. The tools in `tools/invoice_tools.py` are thin wrappers over these layers.
+
 ## Vendor neutrality
 
 This server implements the standard itself: it builds, validates, and signs the document
